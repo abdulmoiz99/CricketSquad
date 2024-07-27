@@ -4,8 +4,11 @@ const teamsController = require("./controllers/teams")
 
 
 router.route("/teams")
-    .get(function (request, response) {
-        teamsController.getAll(request, response)
-    })
+    .get(teamsController.getAll)
+    .post(teamsController.addOne)
+
+router.route("/teams/:Id")
+    .get(teamsController.getOne)
+    .delete(teamsController.deleteOne)
 
 module.exports = router;
