@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const responseHelper = require("../responseHelper");
 
 const env = process.env
 const Team = mongoose.model(env.TEAM_MODEL);
@@ -34,22 +35,53 @@ const getAll = function (request, response) {
     let offset = 0;
     let count = 5;
 
-    if (request.query && request.query.offset) {
-        offset = parseInt(request.query);
-    }
-    if (request.query.count) {
-        count = parseInt(request.count);
+    if (request.query) {
+        if (request.query.offset) {
+            if (isNaN(request.query.offset)) {
+                return responseHelper.sendError(400, process.env.PROVIDE_VALID_OFFSET);
+            }
+            offset = parseInt(request.query.offset, 10);
+            if (offset < 0) {
+                return responseHelper.sendError(400, process.env.OFFSET_MUST_BE_NON_NEGATIVE);
+            }
+        }
+        if (request.query.count) {
+            if (isNaN(request.query.count)) {
+                return responseHelper.sendError(400, process.env.PROVIDE_VALID_COUNT);
+            }
+            count = parseInt(request.query.count, 10);
+            if (count <= 0 || count > 5) {
+                return responseHelper.sendError(400, process.env.COUNT_MUST_BE_POSITIVE_AND_WITHIN_LIMIT);
+            }
+        }
     }
     Team.find().skip(offset).limit(count).exec(function (error, teams) {
-        response.status(200).json(teams);
+        if (error) {
+            return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
+        }
+        else if (!teams || teams.length === 0) {
+            return responseHelper.sendError(response, 404, process.env.NO_RECORD_FOUND);
+        }
+        return response.status(200).json(teams);
     });
 }
 const getOne = function (request, response) {
     console.log("getOne controller");
 
     const teamId = request.params.Id;
+
+    if (!mongoose.Types.ObjectId.isValid(teamId)) {
+        return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
+    }
+
     Team.findById(teamId).exec(function (error, teams) {
-        response.status(200).json(teams);
+        if (error) {
+            return responseHelper.sendError(response, 400, process.env.INTERNAL_SERVER_ERROR);
+        }
+        else if (!teams || teams.length === 0) {
+            return responseHelper.sendError(response, 404, process.env.NO_RECORD_FOUND);
+        }
+        return response.status(200).json(teams);
     });
 }
 
