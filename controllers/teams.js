@@ -5,24 +5,28 @@ const Team = mongoose.model(env.TEAM_MODEL);
 
 const addOne = function (request, response) {
     console.log("addOne controller");
+
     const newTeam = {
         country: request.body.country,
         yearEstablished: request.body.yearEstablished,
         totalWorldCupWon: request.body.totalWorldCupWon,
-        player: {
-            name: request.body.player.name,
-            age: request.body.player.age,
-            yearJoined: request.body.player.yearJoined
-        }
-    }
-    console.log(newTeam)
+        player: request.body.players.map(player => ({
+            name: player.name,
+            age: player.age,
+            yearJoined: player.yearJoined
+        }))
+    };
+
     Team.create(newTeam, function (error, team) {
         if (error) {
-            console.log(error)
+            console.log(error);
+            response.status(500).json({ error: "Internal Server Error" });
+        } else {
+            response.status(200).json(team);
         }
-        else response.status(200).json(team);
-    })
+    });
 }
+
 
 
 const getAll = function (request, response) {

@@ -8,10 +8,12 @@ const playerSchema = mongoose.Schema({
 })
 
 const teamSchema = mongoose.Schema({
-    country: String,
+    country: {
+        type: String,
+    },
     yearEstablished: Number,
     totalWorldCupWon: Number,
-    player: playerSchema
+    player: [playerSchema]
 })
 
 mongoose.model(process.env.TEAM_MODEL, teamSchema, "teams");
