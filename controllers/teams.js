@@ -28,8 +28,6 @@ const addOne = function (request, response) {
     });
 }
 
-
-
 const getAll = function (request, response) {
     console.log("getAll controller");
     let offset = 0;
@@ -76,7 +74,7 @@ const getOne = function (request, response) {
 
     Team.findById(teamId).exec(function (error, teams) {
         if (error) {
-            return responseHelper.sendError(response, 400, process.env.INTERNAL_SERVER_ERROR);
+            return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
         }
         else if (!teams || teams.length === 0) {
             return responseHelper.sendError(response, 404, process.env.NO_RECORD_FOUND);
@@ -88,11 +86,19 @@ const getOne = function (request, response) {
 const deleteOne = function (request, response) {
     console.log("deleteOne controller");
     const teamId = request.params.Id;
+
+    if (!mongoose.Types.ObjectId.isValid(teamId)) {
+        return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
+    }
+
     Team.deleteOne({ _id: teamId }).exec(function (error, teams) {
         if (error) {
-            console.log(error);
+            return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
         }
-        else response.status(200).json(teams);
+        if (teams.deletedCount === 0) {
+            return responseHelper.sendError(response, 404, process.env.NO_RECORD_FOUND);
+        }
+        else response.status(200).json({ message: process.env.RECORD_DELETED_SUCCESSFULLY });
     });
 }
 
