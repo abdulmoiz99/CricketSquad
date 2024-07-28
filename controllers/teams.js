@@ -47,7 +47,7 @@ const addOne = function (request, response) {
         country: request.body.country,
         yearEstablished: request.body.yearEstablished,
         totalWorldCupWon: request.body.totalWorldCupWon,
-        player: request.body.players.map(player => ({
+        players: request.body.players.map(player => ({
             name: player.name,
             age: player.age,
             yearJoined: player.yearJoined
@@ -57,9 +57,9 @@ const addOne = function (request, response) {
     TeamCreateCallback(newTeam, function (error, team) {
         if (error) {
             console.log(error);
-            response.status(500).json({ error: "Internal Server Error" });
+            return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
         } else {
-            response.status(200).json(team);
+            return responseHelper.sendSuccess(response, team)
         }
     });
 }
@@ -68,35 +68,39 @@ const getAll = function (request, response) {
     console.log("getAll controller");
     let offset = 0;
     let count = 5;
+    const decimalBase = 10;
 
     if (request.query) {
         if (request.query.offset) {
             if (isNaN(request.query.offset)) {
-                return responseHelper.sendError(400, process.env.PROVIDE_VALID_OFFSET);
+                return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_OFFSET);
             }
-            offset = parseInt(request.query.offset, 10);
+            offset = parseInt(request.query.offset, decimalBase);
             if (offset < 0) {
-                return responseHelper.sendError(400, process.env.OFFSET_MUST_BE_NON_NEGATIVE);
+                return responseHelper.sendError(response, env.BAD_REQUEST, env.OFFSET_MUST_BE_NON_NEGATIVE);
             }
         }
         if (request.query.count) {
             if (isNaN(request.query.count)) {
-                return responseHelper.sendError(400, process.env.PROVIDE_VALID_COUNT);
+                return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_COUNT);
             }
-            count = parseInt(request.query.count, 10);
-            if (count <= 0 || count > 5) {
-                return responseHelper.sendError(400, process.env.COUNT_MUST_BE_POSITIVE_AND_WITHIN_LIMIT);
+            count = parseInt(request.query.count, decimalBase);
+            if (count <= 0) {
+                return responseHelper.sendError(response, env.BAD_REQUEST, env.COUNT_SHOULD_BE_GREATER_THAN_0);
+            }
+            else if (count > 5) {
+                return responseHelper.sendError(response, env.BAD_REQUEST, env.COUNT_SHOULD_NOT_EXCEED_5);
             }
         }
     }
     TeamFindSkipLimitExecCallback(offset, count, function (error, teams) {
         if (error) {
-            return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
+            return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
         }
         else if (!teams || teams.length === 0) {
-            return responseHelper.sendError(response, 404, process.env.NO_RECORD_FOUND);
+            return responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND);
         }
-        return response.status(200).json(teams);
+        return responseHelper.sendSuccess(response, teams);
     });
 }
 const getOne = function (request, response) {
@@ -105,17 +109,17 @@ const getOne = function (request, response) {
     const teamId = request.params.Id;
 
     if (!mongoose.Types.ObjectId.isValid(teamId)) {
-        return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
+        return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_TEAM_ID);
     }
 
     TeamFindByIdExecCallback(teamId, function (error, teams) {
         if (error) {
-            return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
+            return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
         }
         else if (!teams || teams.length === 0) {
-            return responseHelper.sendError(response, 404, process.env.NO_RECORD_FOUND);
+            return responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND);
         }
-        return response.status(200).json(teams);
+        return responseHelper.sendSuccess(response, teams);
     });
 }
 
@@ -124,20 +128,19 @@ const deleteOne = function (request, response) {
     const teamId = request.params.Id;
 
     if (!mongoose.Types.ObjectId.isValid(teamId)) {
-        return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
+        return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_TEAM_ID);
     }
 
     TeamDeleteOneExecCallback(teamId, function (error, teams) {
         if (error) {
-            return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
+            return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
         }
         if (teams.deletedCount === 0) {
-            return responseHelper.sendError(response, 404, process.env.NO_RECORD_FOUND);
+            return responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND);
         }
-        else response.status(200).json({ message: process.env.RECORD_DELETED_SUCCESSFULLY });
+        else responseHelper.sendSuccess(response, { message: env.RECORD_DELETED_SUCCESSFULLY });
     });
 }
-
 
 const updateOne = function (request, response) {
     console.log("updateOne teams controller");
@@ -145,21 +148,31 @@ const updateOne = function (request, response) {
     const teamId = request.params.Id;
 
     if (!mongoose.Types.ObjectId.isValid(teamId)) {
-        return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
+        return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_TEAM_ID);
     }
-    const newTeam = {
-        country: request.body.country,
-        yearEstablished: request.body.yearEstablished,
-        totalWorldCupWon: request.body.totalWorldCupWon,
-    };
-    TeamUpdateOneExecCallback(teamId, newTeam, function (error, teams) {
+    const updatedTeam = {};
+    if (request.body && Object.keys(request.body).length != 0) {
+        if (request.body.country !== null) {
+            updatedTeam.country = request.body.country;
+        }
+        if (request.body.yearEstablished !== null) {
+            updatedTeam.yearEstablished = request.body.yearEstablished;
+        }
+        if (request.body.totalWorldCupWon !== null) {
+            updatedTeam.totalWorldCupWon = request.body.totalWorldCupWon;
+        }
+    }
+    else {
+        return responseHelper.sendError(response, env.BAD_REQUEST, env.MISSING_REQUEST_BODY);
+    }
+    TeamUpdateOneExecCallback(teamId, updatedTeam, function (error, teams) {
         if (error) {
-            return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
+            return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
         }
         else if (!teams || teams.length === 0) {
-            return responseHelper.sendError(response, 404, process.env.NO_RECORD_FOUND);
+            return responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND);
         }
-        return response.status(200).json(teams);
+        return responseHelper.sendSuccess(response, { message: env.RECORD_UPDATED_SUCCESSFULLY });
     })
 }
 
@@ -169,31 +182,42 @@ const updateFull = function (request, response) {
     const teamId = request.params.Id;
 
     if (!mongoose.Types.ObjectId.isValid(teamId)) {
-        return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
+        return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_TEAM_ID);
     }
-    const updatedTeam = {
-        country: request.body.country,
-        yearEstablished: request.body.yearEstablished,
-        totalWorldCupWon: request.body.totalWorldCupWon,
-        player: request.body.players.map(player => ({
-            name: player.name,
-            age: player.age,
-            yearJoined: player.yearJoined
-        }))
-    };
-    console.log(updatedTeam);
+    const updatedTeam = {};
+
+    if (request.body && Object.keys(request.body).length != 0) {
+        if (request.body.country !== null) {
+            updatedTeam.country = request.body.country;
+        }
+        if (request.body.yearEstablished !== null) {
+            updatedTeam.yearEstablished = request.body.yearEstablished;
+        }
+        if (request.body.totalWorldCupWon !== null) {
+            updatedTeam.totalWorldCupWon = request.body.totalWorldCupWon;
+        }
+        if (request.body.players !== null || request.body.players == undefined) {
+            updatedTeam.players = request.body.players.map(player => ({
+                name: player.name,
+                age: player.age,
+                yearJoined: player.yearJoined
+            }));
+        }
+    }
+    else {
+        return responseHelper.sendError(response, env.BAD_REQUEST, env.MISSING_REQUEST_BODY);
+    }
+
     TeamReplaceOneCallback(teamId, updatedTeam, function (error, teams) {
         if (error) {
-            return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
+            return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
         }
-        else if (!teams || teams.length === 0) {
-            return responseHelper.sendError(response, 404, process.env.NO_RECORD_FOUND);
+        else if (!teams || teams.modifiedCount === 0) {
+            return responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND);
         }
-        return response.status(200).json(teams);
+        return responseHelper.sendSuccess(response, { message: env.RECORD_UPDATED_SUCCESSFULLY });
     })
 }
-
-
 
 module.exports = {
     getAll,

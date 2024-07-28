@@ -32,29 +32,23 @@ const TeamUpdateOneExecCallback = callbackify(function (teamId, playerId, update
     return Team.findOneAndUpdate(filter, update);
 })
 
-const TeamCreateCallback = callbackify(function (newTeam) {
-    return Team.create(newTeam);
-})
-
-
 const getAll = function (request, response) {
     console.log("players getAll")
 
     const teamId = request.params.Id;
 
     if (!mongoose.Types.ObjectId.isValid(teamId)) {
-        return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
+        return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_TEAM_ID);
     }
 
     TeamFindByIdExecCallback(teamId, function (error, teams) {
-
         if (error) {
-            return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
+            return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
         }
         else if (!teams || teams.length === 0) {
-            return responseHelper.sendError(response, 404, process.env.NO_RECORD_FOUND);
+            return responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND);
         }
-        return response.status(200).json(teams);
+        return responseHelper.sendSuccess(response, teams);
     });
 }
 
@@ -64,62 +58,72 @@ const deleteOne = function (request, response) {
     const playerId = request.params.playerId;
 
     if (!mongoose.Types.ObjectId.isValid(teamId)) {
-        return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
+        return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_TEAM_ID);
     }
     if (!mongoose.Types.ObjectId.isValid(playerId)) {
-        return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_PLAYER_ID);
+        return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_PLAYER_ID);
     }
     TeamFindByIdExecCallback(teamId, function (err, teams) {
         if (err)
-            res.status(500).json({ message: err });
+            res.status(env.INTERNAL_SERVER).json({ message: err });
         else if (teams == null)
-            res.status(404).json({ message: 'team not found!' });
+            res.status(env.NOT_FOUND).json({ message: 'team not found!' });
         else {
             const deletedPlayer = teams.players.id(playerId);
             if (!deletedPlayer) {
-                return responseHelper.sendError(response, 404, process.env.NO_RECORD_FOUND);
+                return responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND);
             }
 
             TeamFindByIdAndUpdateExecCallBack(teams, { $pull: { players: { _id: playerId } } }, function (error, player) {
                 if (error) {
                     console.log(error);
-                    response.status(500).json({ error: "Internal Server Error" });
+                    return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
                 } else {
-                    response.status(200).json(deletedPlayer);
+                    return responseHelper.sendSuccess(response, env.PLAYER_DELETED_SUCCESSFULLY);
                 }
             });
         }
     })
-
 }
-
 
 const addOne = function (request, response) {
     console.log("players addOne controller");
     const teamId = request.params.Id;
 
     if (!mongoose.Types.ObjectId.isValid(teamId)) {
-        return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
+        return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_TEAM_ID);
     }
-    const newPlayer = {
-        name: request.body.name,
-        age: request.body.age,
-        yearJoined: request.body.yearJoined,
-    };
-
-    TeamFindByIdExecCallback(teamId, function (err, teams) {
-        if (err)
-            res.status(500).json({ message: err });
+    const newPlayer = {};
+    if (request.body && Object.keys(request.body).length != 0) {
+        if (request.body.name !== null) {
+            newPlayer.name = request.body.name;
+        }
+        if (request.body.age !== null) {
+            newPlayer.age = request.body.age;
+        }
+        if (request.body.yearJoined !== null) {
+            newPlayer.yearJoined = request.body.yearJoined;
+        }
+    }
+    else {
+        return responseHelper.sendError(response, env.BAD_REQUEST, env.MISSING_REQUEST_BODY);
+    }
+    TeamFindByIdExecCallback(teamId, function (error, teams) {
+        if (error) {
+            console.log()
+            return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
+        }
         else if (teams == null)
-            res.status(404).json({ message: 'team not found!' });
+            return responseHelper.sendError(response, env.NOT_FOUND, env.TEAM_NOT_FOUND);
         else {
             teams.players.push(newPlayer);
             TeamSaveCallBack(teams, function (error, player) {
                 if (error) {
                     console.log(error);
-                    response.status(500).json({ error: "Internal Server Error" });
+                    return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
+
                 } else {
-                    response.status(200).json(player);
+                    return responseHelper.sendSuccess(response, player);
                 }
             });
         }
@@ -133,28 +137,38 @@ const updateOne = function (request, response) {
     const teamId = request.params.teamId;
     const playerId = request.params.playerId;
 
-
     if (!mongoose.Types.ObjectId.isValid(teamId)) {
-        return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
+        return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_TEAM_ID);
     }
 
     if (!mongoose.Types.ObjectId.isValid(playerId)) {
-        return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
+        return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_TEAM_ID);
     }
 
-    const updatedPlayer = {
-        name: request.body.name,
-        age: request.body.age,
-        yearJoined: request.body.yearJoined,
-    };
+    const updatedPlayer = {};
+    if (request.body && Object.keys(request.body).length != 0) {
+        if (request.body.name !== null) {
+            updatedPlayer.name = request.body.name;
+        }
+        if (request.body.age !== null) {
+            updatedPlayer.age = request.body.age;
+        }
+        if (request.body.yearJoined !== null) {
+            updatedPlayer.yearJoined = request.body.yearJoined;
+        }
+    }
+    else {
+        return responseHelper.sendError(response, env.BAD_REQUEST, env.MISSING_REQUEST_BODY);
+    }
+
     TeamUpdateOneExecCallback(teamId, playerId, updatedPlayer, function (error, teams) {
         if (error) {
-            return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
+            return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
         }
         else if (!teams || teams.length === 0) {
-            return responseHelper.sendError(response, 404, process.env.NO_RECORD_FOUND);
+            return responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND);
         }
-        return response.status(200).json(teams);
+        return responseHelper.sendSuccess(response, env.PLAYER_UPDATED_SUCCESSFULLY);
     })
 }
 
