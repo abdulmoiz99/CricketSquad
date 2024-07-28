@@ -43,21 +43,32 @@ const TeamReplaceOneCallback = callbackify(function (teamId, updatedTeam) {
 const addOne = function (request, response) {
     console.log("addOne controller");
 
-    const newTeam = {
-        country: request.body.country,
-        yearEstablished: request.body.yearEstablished,
-        totalWorldCupWon: request.body.totalWorldCupWon,
-        players: request.body.players.map(player => ({
-            name: player.name,
-            age: player.age,
-            yearJoined: player.yearJoined
-        }))
-    };
+    const newTeam = {};
 
+    if (request.body && Object.keys(request.body).length != 0) {
+        if (request.body.country !== null) {
+            newTeam.country = request.body.country;
+        }
+        if (request.body.yearEstablished !== null) {
+            newTeam.yearEstablished = request.body.yearEstablished;
+        }
+        if (request.body.totalWorldCupWon !== null) {
+            newTeam.totalWorldCupWon = request.body.totalWorldCupWon;
+        }
+        if (request.body.players !== null && request.body.players != undefined) {
+            newTeam.players = request.body.players.map(player => ({
+                name: player.name,
+                age: player.age,
+                yearJoined: player.yearJoined
+            }));
+        }
+    }
+    else {
+        return responseHelper.sendError(response, env.BAD_REQUEST, env.MISSING_REQUEST_BODY);
+    }
     TeamCreateCallback(newTeam, function (error, team) {
         if (error) {
-            console.log(error);
-            return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
+            return responseHelper.handleError(response, error);
         } else {
             return responseHelper.sendSuccess(response, team)
         }
@@ -95,7 +106,7 @@ const getAll = function (request, response) {
     }
     TeamFindSkipLimitExecCallback(offset, count, function (error, teams) {
         if (error) {
-            return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
+            return responseHelper.handleError(response.error);
         }
         else if (!teams || teams.length === 0) {
             return responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND);
@@ -103,6 +114,7 @@ const getAll = function (request, response) {
         return responseHelper.sendSuccess(response, teams);
     });
 }
+
 const getOne = function (request, response) {
     console.log("getOne controller");
 

@@ -1,18 +1,33 @@
 const mongoose = require("mongoose")
 
 const playerSchema = mongoose.Schema({
-
-    name: String,
-    age: Number,
-    yearJoined: Number
+    name: {
+        type: String,
+        required: [true, 'player name is required']
+    },
+    age: {
+        type: Number,
+        required: [true, 'player age is required']
+    },
+    yearJoined: {
+        type: Number,
+        required: [true, 'player year joined is required']
+    }
 })
 
 const teamSchema = mongoose.Schema({
     country: {
         type: String,
+        required: [true, 'country is required']
     },
-    yearEstablished: Number,
-    totalWorldCupWon: Number,
+    yearEstablished: {
+        type: Number,
+        required: [true, 'year established is required']
+    },
+    totalWorldCupWon: {
+        type: Number,
+
+    },
     players: {
         type: [playerSchema]
     }
