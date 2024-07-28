@@ -11,6 +11,12 @@ const TeamFindByIdExecCallback = callbackify(function (teamId) {
 const TeamFindByIdAndUpdateExecCallBack = callbackify(function (id, player) {
     return Team.findByIdAndUpdate(id, player).exec();
 })
+
+const TeamSaveCallBack = callbackify(function (teams) {
+    return teams.save();
+})
+
+
 const getAll = function (request, response) {
     console.log("players getAll")
 
@@ -67,7 +73,42 @@ const deleteOne = function (request, response) {
 
 }
 
+
+const addOne = function (request, response) {
+    console.log("players addOne controller");
+    const teamId = request.params.Id;
+
+    if (!mongoose.Types.ObjectId.isValid(teamId)) {
+        return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
+    }
+    const newPlayer = {
+        name: request.body.name,
+        age: request.body.age,
+        yearJoined: request.body.yearJoined,
+    };
+
+    TeamFindByIdExecCallback(teamId, function (err, teams) {
+        if (err)
+            res.status(500).json({ message: err });
+        else if (teams == null)
+            res.status(404).json({ message: 'restaurant not found!' });
+        else {
+            teams.players.push(newPlayer);
+            TeamSaveCallBack(teams, function (error, player) {
+                if (error) {
+                    console.log(error);
+                    response.status(500).json({ error: "Internal Server Error" });
+                } else {
+                    response.status(200).json(player);
+                }
+            });
+        }
+    })
+
+}
+
 module.exports = {
     getAll,
     deleteOne,
+    addOne,
 }
