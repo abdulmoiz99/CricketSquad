@@ -13,7 +13,9 @@ const teamSchema = mongoose.Schema({
     },
     yearEstablished: Number,
     totalWorldCupWon: Number,
-    player: [playerSchema]
+    players: {
+        type: [playerSchema]
+    }
 })
 
 mongoose.model(process.env.TEAM_MODEL, teamSchema, "teams");

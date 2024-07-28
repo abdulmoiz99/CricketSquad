@@ -15,6 +15,8 @@ router.route("/teams/:Id")
 
 router.route("/teams/:Id/players")
     .get(playersController.getAll)
+
+router.route("/teams/:teamId/players/:playerId")
     .delete(playersController.deleteOne)
 
 module.exports = router;
