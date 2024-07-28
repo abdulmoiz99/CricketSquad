@@ -1,8 +1,25 @@
 const mongoose = require("mongoose");
 const responseHelper = require("../responseHelper");
+const callbackify = require("util").callbackify
 
 const env = process.env
 const Team = mongoose.model(env.TEAM_MODEL);
+
+const TeamFindSkipLimitExecCallback = callbackify(function (offset, count) {
+    return Team.find().skip(offset).limit(count).exec();
+})
+
+const TeamFindByIdExecCallback = callbackify(function (teamId) {
+    return Team.findById(teamId).exec();
+})
+
+const TeamDeleteOneExecCallback = callbackify(function (teamId) {
+    return Team.deleteOne({ _id: teamId }).exec();
+})
+
+const TeamCreateCallback = callbackify(function (newTeam) {
+    return Team.create(newTeam);
+})
 
 const addOne = function (request, response) {
     console.log("addOne controller");
@@ -18,7 +35,7 @@ const addOne = function (request, response) {
         }))
     };
 
-    Team.create(newTeam, function (error, team) {
+    TeamCreateCallback(newTeam, function (error, team) {
         if (error) {
             console.log(error);
             response.status(500).json({ error: "Internal Server Error" });
@@ -27,6 +44,7 @@ const addOne = function (request, response) {
         }
     });
 }
+
 
 const getAll = function (request, response) {
     console.log("getAll controller");
@@ -53,7 +71,7 @@ const getAll = function (request, response) {
             }
         }
     }
-    Team.find().skip(offset).limit(count).exec(function (error, teams) {
+    TeamFindSkipLimitExecCallback(offset, count, function (error, teams) {
         if (error) {
             return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
         }
@@ -72,7 +90,7 @@ const getOne = function (request, response) {
         return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
     }
 
-    Team.findById(teamId).exec(function (error, teams) {
+    TeamFindByIdExecCallback(teamId, function (error, teams) {
         if (error) {
             return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
         }
@@ -91,11 +109,10 @@ const deleteOne = function (request, response) {
         return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
     }
 
-    Team.deleteOne({ _id: teamId }).exec(function (error, teams) {
+    TeamDeleteOneExecCallback(teamId, function (error, teams) {
         if (error) {
             return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
         }
-        return response.status(200).json(teams)
         if (teams.deletedCount === 0) {
             return responseHelper.sendError(response, 404, process.env.NO_RECORD_FOUND);
         }

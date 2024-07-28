@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 require("./team-model");
 const env = process.env;
 
-
-mongoose.connect(env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(env.DB_URL);
 
 mongoose.connection.on("connected", function () {
     console.log("mongoose connected to", env.DB_URL);

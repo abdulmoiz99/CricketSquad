@@ -1,8 +1,13 @@
 const mongoose = require("mongoose");
 const responseHelper = require("../responseHelper");
+const callbackify = require("util").callbackify
 
 const env = process.env
 const Team = mongoose.model(env.TEAM_MODEL);
+
+const TeamFindByIdExecCallback = callbackify(function (teamId) {
+    return Team.findById(teamId, { 'players': 1 }).exec()
+})
 
 const getAll = function (request, response) {
     console.log("players getAll")
@@ -13,7 +18,7 @@ const getAll = function (request, response) {
         return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
     }
 
-    Team.findById(teamId, { 'players': 1 }).exec(function (error, teams) {
+    TeamFindByIdExecCallback(teamId, function (error, teams) {
 
         if (error) {
             return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
