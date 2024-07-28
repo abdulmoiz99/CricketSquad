@@ -36,6 +36,9 @@ const TeamUpdateOneExecCallback = callbackify(function (teamId, newTeam) {
 const TeamCreateCallback = callbackify(function (newTeam) {
     return Team.create(newTeam);
 })
+const TeamReplaceOneCallback = callbackify(function (teamId, updatedTeam) {
+    return Team.replaceOne({ _id: teamId }, updatedTeam)
+})
 
 const addOne = function (request, response) {
     console.log("addOne controller");
@@ -160,6 +163,36 @@ const updateOne = function (request, response) {
     })
 }
 
+const updateFull = function (request, response) {
+    console.log("updateFull teams controller");
+
+    const teamId = request.params.Id;
+
+    if (!mongoose.Types.ObjectId.isValid(teamId)) {
+        return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
+    }
+    const updatedTeam = {
+        country: request.body.country,
+        yearEstablished: request.body.yearEstablished,
+        totalWorldCupWon: request.body.totalWorldCupWon,
+        player: request.body.players.map(player => ({
+            name: player.name,
+            age: player.age,
+            yearJoined: player.yearJoined
+        }))
+    };
+    console.log(updatedTeam);
+    TeamReplaceOneCallback(teamId, updatedTeam, function (error, teams) {
+        if (error) {
+            return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
+        }
+        else if (!teams || teams.length === 0) {
+            return responseHelper.sendError(response, 404, process.env.NO_RECORD_FOUND);
+        }
+        return response.status(200).json(teams);
+    })
+}
+
 
 
 module.exports = {
@@ -168,4 +201,5 @@ module.exports = {
     deleteOne,
     addOne,
     updateOne,
+    updateFull,
 }
