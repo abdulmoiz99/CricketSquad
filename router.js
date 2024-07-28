@@ -11,9 +11,7 @@ router.route("/teams")
 router.route("/teams/:Id")
     .get(teamsController.getOne)
     .delete(teamsController.deleteOne)
-    .put(teamsController.updateOne)
-
-
+    .patch(teamsController.updateOne)
 
 router.route("/teams/:Id/players")
     .get(playersController.getAll)
@@ -22,5 +20,6 @@ router.route("/teams/:Id/players")
 
 router.route("/teams/:teamId/players/:playerId")
     .delete(playersController.deleteOne)
+    .patch(playersController.updateOne)
 
 module.exports = router;

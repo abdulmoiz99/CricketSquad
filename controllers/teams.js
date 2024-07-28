@@ -24,10 +24,10 @@ const TeamUpdateOneExecCallback = callbackify(function (teamId, newTeam) {
     if (newTeam.country !== null) {
         update.country = newTeam.country;
     }
-    if (newTeam.yearEstablished !== null && newTeam.yearEstablished !== undefined) {
+    if (newTeam.yearEstablished !== null) {
         update.yearEstablished = newTeam.yearEstablished;
     }
-    if (newTeam.totalWorldCupWon !== null && newTeam.totalWorldCupWon !== undefined) {
+    if (newTeam.totalWorldCupWon !== null) {
         update.totalWorldCupWon = newTeam.totalWorldCupWon;
     }
 

@@ -15,6 +15,26 @@ const TeamFindByIdAndUpdateExecCallBack = callbackify(function (id, player) {
 const TeamSaveCallBack = callbackify(function (teams) {
     return teams.save();
 })
+const TeamUpdateOneExecCallback = callbackify(function (teamId, playerId, updatedPlayer) {
+    const filter = { _id: teamId, "players._id": playerId };
+    const update = {};
+
+    if (updatedPlayer.name !== null) {
+        update["players.$.name"] = updatedPlayer.name;
+    }
+    if (updatedPlayer.age !== null) {
+        update["players.$.age"] = updatedPlayer.age;
+    }
+    if (updatedPlayer.yearJoined !== null) {
+        update["players.$.yearJoined"] = updatedPlayer.yearJoined;
+    }
+
+    return Team.findOneAndUpdate(filter, update);
+})
+
+const TeamCreateCallback = callbackify(function (newTeam) {
+    return Team.create(newTeam);
+})
 
 
 const getAll = function (request, response) {
@@ -107,8 +127,40 @@ const addOne = function (request, response) {
 
 }
 
+const updateOne = function (request, response) {
+    console.log("updateOne player controller");
+
+    const teamId = request.params.teamId;
+    const playerId = request.params.playerId;
+
+
+    if (!mongoose.Types.ObjectId.isValid(teamId)) {
+        return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(playerId)) {
+        return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
+    }
+
+    const updatedPlayer = {
+        name: request.body.name,
+        age: request.body.age,
+        yearJoined: request.body.yearJoined,
+    };
+    TeamUpdateOneExecCallback(teamId, playerId, updatedPlayer, function (error, teams) {
+        if (error) {
+            return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
+        }
+        else if (!teams || teams.length === 0) {
+            return responseHelper.sendError(response, 404, process.env.NO_RECORD_FOUND);
+        }
+        return response.status(200).json(teams);
+    })
+}
+
 module.exports = {
     getAll,
     deleteOne,
     addOne,
+    updateOne,
 }
