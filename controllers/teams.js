@@ -95,6 +95,7 @@ const deleteOne = function (request, response) {
         if (error) {
             return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
         }
+        return response.status(200).json(teams)
         if (teams.deletedCount === 0) {
             return responseHelper.sendError(response, 404, process.env.NO_RECORD_FOUND);
         }
