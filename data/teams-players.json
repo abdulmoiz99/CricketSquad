@@ -5,7 +5,7 @@
 	"country": "Pakistan",
 	"yearEstablished": 1947,
 	"totalWorldCupWon": 1,
-	"player": [
+	"players": [
 		{
 			"name": "Imran Khan",
 			"age": 71,
@@ -104,7 +104,7 @@
 	"country": "Australia",
 	"yearEstablished": 1905,
 	"totalWorldCupWon": 5,
-	"player": [
+	"players": [
 		{
 			"name": "Steve Smith",
 			"age": 35,
@@ -203,7 +203,7 @@
 	"country": "New Zealand",
 	"yearEstablished": 1930,
 	"totalWorldCupWon": 0,
-	"player": [
+	"players": [
 		{
 			"name": "Kane Williamson",
 			"age": 33,
@@ -302,7 +302,7 @@
 	"country": "India",
 	"yearEstablished": 1926,
 	"totalWorldCupWon": 2,
-	"player": [
+	"players": [
 		{
 			"name": "Virat Kohli",
 			"age": 35,
@@ -401,7 +401,7 @@
 	"country": "South Africa",
 	"yearEstablished": 1889,
 	"totalWorldCupWon": 0,
-	"player": [
+	"players": [
 		{
 			"name": "AB de Villiers",
 			"age": 40,
@@ -500,7 +500,7 @@
 	"country": "England",
 	"yearEstablished": 1877,
 	"totalWorldCupWon": 1,
-	"player": [
+	"players": [
 		{
 			"name": "Joe Root",
 			"age": 33,
@@ -599,7 +599,7 @@
 	"country": "Bangladesh",
 	"yearEstablished": 1977,
 	"totalWorldCupWon": 0,
-	"player": [
+	"players": [
 		{
 			"name": "Shakib Al Hasan",
 			"age": 37,
@@ -698,7 +698,7 @@
 	"country": "Sri Lanka",
 	"yearEstablished": 1926,
 	"totalWorldCupWon": 1,
-	"player": [
+	"players": [
 		{
 			"name": "Kumar Sangakkara",
 			"age": 46,
