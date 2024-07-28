@@ -53,7 +53,7 @@ const deleteOne = function (request, response) {
         if (err)
             res.status(500).json({ message: err });
         else if (teams == null)
-            res.status(404).json({ message: 'restaurant not found!' });
+            res.status(404).json({ message: 'team not found!' });
         else {
             const deletedPlayer = teams.players.id(playerId);
             if (!deletedPlayer) {
@@ -91,7 +91,7 @@ const addOne = function (request, response) {
         if (err)
             res.status(500).json({ message: err });
         else if (teams == null)
-            res.status(404).json({ message: 'restaurant not found!' });
+            res.status(404).json({ message: 'team not found!' });
         else {
             teams.players.push(newPlayer);
             TeamSaveCallBack(teams, function (error, player) {
