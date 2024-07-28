@@ -17,6 +17,16 @@ const TeamDeleteOneExecCallback = callbackify(function (teamId) {
     return Team.deleteOne({ _id: teamId }).exec();
 })
 
+const TeamUpdateOneExecCallback = callbackify(function (teamId, newTeam) {
+    return Team.updateOne({ "_id": teamId }, {
+        $set:
+        {
+            "country": newTeam.country,
+            "yearEstablished": newTeam.yearEstablished,
+            "totalWorldCupWon": newTeam.totalWorldCupWon
+        }
+    }).exec()
+})
 const TeamCreateCallback = callbackify(function (newTeam) {
     return Team.create(newTeam);
 })
@@ -44,7 +54,6 @@ const addOne = function (request, response) {
         }
     });
 }
-
 
 const getAll = function (request, response) {
     console.log("getAll controller");
@@ -120,9 +129,37 @@ const deleteOne = function (request, response) {
     });
 }
 
+
+const updateOne = function (request, response) {
+    console.log("updateCompleteTeam teams controller");
+
+    const teamId = request.params.Id;
+
+    if (!mongoose.Types.ObjectId.isValid(teamId)) {
+        return responseHelper.sendError(response, 400, process.env.PROVIDE_VALID_TEAM_ID);
+    }
+    const newTeam = {
+        country: request.body.country,
+        yearEstablished: request.body.yearEstablished,
+        totalWorldCupWon: request.body.totalWorldCupWon,
+    };
+    TeamUpdateOneExecCallback(teamId, newTeam, function (error, teams) {
+        if (error) {
+            return responseHelper.sendError(response, 500, process.env.INTERNAL_SERVER_ERROR);
+        }
+        else if (!teams || teams.length === 0) {
+            return responseHelper.sendError(response, 404, process.env.NO_RECORD_FOUND);
+        }
+        return response.status(200).json(teams);
+    })
+}
+
+
+
 module.exports = {
     getAll,
     getOne,
     deleteOne,
     addOne,
+    updateOne,
 }

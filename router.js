@@ -11,6 +11,8 @@ router.route("/teams")
 router.route("/teams/:Id")
     .get(teamsController.getOne)
     .delete(teamsController.deleteOne)
+    .put(teamsController.updateOne)
+
 
 
 router.route("/teams/:Id/players")
