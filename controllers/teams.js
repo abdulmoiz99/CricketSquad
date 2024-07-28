@@ -18,14 +18,20 @@ const TeamDeleteOneExecCallback = callbackify(function (teamId) {
 })
 
 const TeamUpdateOneExecCallback = callbackify(function (teamId, newTeam) {
-    return Team.updateOne({ "_id": teamId }, {
-        $set:
-        {
-            "country": newTeam.country,
-            "yearEstablished": newTeam.yearEstablished,
-            "totalWorldCupWon": newTeam.totalWorldCupWon
-        }
-    }).exec()
+    const filter = { _id: teamId };
+    const update = {};
+
+    if (newTeam.country !== null) {
+        update.country = newTeam.country;
+    }
+    if (newTeam.yearEstablished !== null && newTeam.yearEstablished !== undefined) {
+        update.yearEstablished = newTeam.yearEstablished;
+    }
+    if (newTeam.totalWorldCupWon !== null && newTeam.totalWorldCupWon !== undefined) {
+        update.totalWorldCupWon = newTeam.totalWorldCupWon;
+    }
+
+    return Team.findOneAndUpdate(filter, update);
 })
 const TeamCreateCallback = callbackify(function (newTeam) {
     return Team.create(newTeam);
@@ -131,7 +137,7 @@ const deleteOne = function (request, response) {
 
 
 const updateOne = function (request, response) {
-    console.log("updateCompleteTeam teams controller");
+    console.log("updateOne teams controller");
 
     const teamId = request.params.Id;
 
