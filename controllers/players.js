@@ -43,12 +43,13 @@ const getAll = function (request, response) {
 
     TeamFindByIdExecCallback(teamId, function (error, teams) {
         if (error) {
+            console.log(error)
             return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
         }
         else if (!teams || teams.length === 0) {
             return responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND);
         }
-        return responseHelper.sendSuccess(response, teams);
+        return responseHelper.sendSuccess(response, teams.players);
     });
 }
 

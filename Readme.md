@@ -1,4 +1,4 @@
-# Cricket Squad
+# Team Management API
 
 This API provides endpoints to manage teams and their associated players. Below is the documentation for each endpoint.
 
@@ -23,7 +23,7 @@ Retrieve a list of teams with their players. This endpoint will return a maximum
 Retrieve details of a specific team by its ID.
 
 - **Method**: `GET`
-- **URL**: `{baseURL}/teams/{teamId}`
+- **URL**: `{baseURL}/teams/66a59b4f4ac250bb43a9d6d7`
 
 **URL Parameters**:
 - `teamId`: The ID of the team to retrieve (e.g., `66a59b4f4ac250bb43a9d6d7`).
@@ -36,10 +36,10 @@ Retrieve details of a specific team by its ID.
 Remove a specific team by its ID.
 
 - **Method**: `DELETE`
-- **URL**: `{baseURL}/teams/{teamId}`
+- **URL**: `{baseURL}/teams/66a59b9c4ac250bb43a9d6f1`
 
 **URL Parameters**:
-- `teamId`: The ID of the team to delete (e.g., `66a59b4f4ac250bb43a9d6d7`).
+- `teamId`: The ID of the team to delete (e.g., `66a59b9c4ac250bb43a9d6f1`).
 
 **Response**:
 - **204 No Content**: Successfully deleted the team.
@@ -50,7 +50,7 @@ Remove a specific team by its ID.
 Update specific fields of a team's data. At least one field in the request body is required.
 
 - **Method**: `PATCH`
-- **URL**: `{baseURL}/teams/{teamId}`
+- **URL**: `{baseURL}/teams/66a59b4f4ac250bb43a9d6d7`
 
 **URL Parameters**:
 - `teamId`: The ID of the team to update (e.g., `66a59b4f4ac250bb43a9d6d7`).
