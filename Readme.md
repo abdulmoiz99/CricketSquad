@@ -1,4 +1,4 @@
-# Team Management API
+# Cricket Squad
 
 This API provides endpoints to manage teams and their associated players. Below is the documentation for each endpoint.
 
