@@ -20,14 +20,14 @@ mongoose.connection.on("error", function (error) {
 })
 
 process.on("SIGINT", function () {
-    console.log("Reaching SIGINT")
-    mongooseDisconnectWithCallback((error) => {
-        if (error) {
-            console.error("Error disconnecting mongoose:", error);
-            process.exit(1);
-        } else {
-            console.log("Mongoose disconnected");
-            process.exit(0);
-        }
-    });
+    // console.log("Reaching SIGINT")
+    // mongooseDisconnectWithCallback((error) => {
+    //     if (error) {
+    //         console.error("Error disconnecting mongoose:", error);
+    //         process.exit(1);
+    //     } else {
+    //         console.log("Mongoose disconnected");
+    //         process.exit(0);
+    //     }
+    // });
 })

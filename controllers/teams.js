@@ -17,27 +17,12 @@ const TeamDeleteOneExecCallback = callbackify(function (teamId) {
     return Team.deleteOne({ _id: teamId }).exec();
 })
 
-const TeamUpdateOneExecCallback = callbackify(function (teamId, newTeam) {
-    const filter = { _id: teamId };
-    const update = {};
-
-    if (newTeam.country !== null) {
-        update.country = newTeam.country;
-    }
-    if (newTeam.yearEstablished !== null) {
-        update.yearEstablished = newTeam.yearEstablished;
-    }
-    if (newTeam.totalWorldCupWon !== null) {
-        update.totalWorldCupWon = newTeam.totalWorldCupWon;
-    }
-
-    return Team.findOneAndUpdate(filter, update);
+const TeamSaveCallBack = callbackify(function (team) {
+    return team.save();
 })
+
 const TeamCreateCallback = callbackify(function (newTeam) {
     return Team.create(newTeam);
-})
-const TeamReplaceOneCallback = callbackify(function (teamId, updatedTeam) {
-    return Team.replaceOne({ _id: teamId }, updatedTeam)
 })
 
 const addOne = function (request, response) {
@@ -153,82 +138,43 @@ const deleteOne = function (request, response) {
         else responseHelper.sendSuccess(response, { message: env.RECORD_DELETED_SUCCESSFULLY });
     });
 }
-
-const updateOne = function (request, response) {
-    console.log("updateOne teams controller");
-
+const _update = function (request, response, updateTeamMapping) {
     const teamId = request.params.Id;
 
     if (!mongoose.Types.ObjectId.isValid(teamId)) {
         return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_TEAM_ID);
     }
-    const updatedTeam = {};
-    if (request.body && Object.keys(request.body).length != 0) {
-        if (request.body.country !== null) {
-            updatedTeam.country = request.body.country;
-        }
-        if (request.body.yearEstablished !== null) {
-            updatedTeam.yearEstablished = request.body.yearEstablished;
-        }
-        if (request.body.totalWorldCupWon !== null) {
-            updatedTeam.totalWorldCupWon = request.body.totalWorldCupWon;
-        }
-    }
-    else {
-        return responseHelper.sendError(response, env.BAD_REQUEST, env.MISSING_REQUEST_BODY);
-    }
-    TeamUpdateOneExecCallback(teamId, updatedTeam, function (error, teams) {
-        if (error) {
-            return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
-        }
-        else if (!teams || teams.length === 0) {
+    TeamFindByIdExecCallback(teamId, function (error, team) {
+        if (!team) {
             return responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND);
         }
-        return responseHelper.sendSuccess(response, { message: env.RECORD_UPDATED_SUCCESSFULLY });
+        else {
+            updateTeamMapping(request, team);
+            TeamSaveCallBack(team, function (error, updatedTeam) {
+                if (error) {
+                    return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
+                }
+                else {
+                    console.log(updatedTeam);
+                    return responseHelper.sendSuccess(response, { message: env.RECORD_UPDATED_SUCCESSFULLY });
+                }
+            });
+
+        }
     })
 }
 
-const updateFull = function (request, response) {
-    console.log("updateFull teams controller");
+const partialUpdate = function (request, response) {
+    console.log("partialUpdate teams controller");
 
-    const teamId = request.params.Id;
+    _update(request, response, updatePartialTeamMapping);
+}
 
-    if (!mongoose.Types.ObjectId.isValid(teamId)) {
-        return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_TEAM_ID);
-    }
-    const updatedTeam = {};
 
-    if (request.body && Object.keys(request.body).length != 0) {
-        if (request.body.country !== null) {
-            updatedTeam.country = request.body.country;
-        }
-        if (request.body.yearEstablished !== null) {
-            updatedTeam.yearEstablished = request.body.yearEstablished;
-        }
-        if (request.body.totalWorldCupWon !== null) {
-            updatedTeam.totalWorldCupWon = request.body.totalWorldCupWon;
-        }
-        if (request.body.players !== null || request.body.players == undefined) {
-            updatedTeam.players = request.body.players.map(player => ({
-                name: player.name,
-                age: player.age,
-                yearJoined: player.yearJoined
-            }));
-        }
-    }
-    else {
-        return responseHelper.sendError(response, env.BAD_REQUEST, env.MISSING_REQUEST_BODY);
-    }
+const fullUpdate = function (request, response) {
+    console.log("fullUpdate teams controller");
 
-    TeamReplaceOneCallback(teamId, updatedTeam, function (error, teams) {
-        if (error) {
-            return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
-        }
-        else if (!teams || teams.modifiedCount === 0) {
-            return responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND);
-        }
-        return responseHelper.sendSuccess(response, { message: env.RECORD_UPDATED_SUCCESSFULLY });
-    })
+    _update(request, response, updateFullTeamMapping);
 }
 
 module.exports = {
@@ -236,6 +182,36 @@ module.exports = {
     getOne,
     deleteOne,
     addOne,
-    updateOne,
-    updateFull,
+    partialUpdate,
+    fullUpdate,
+}
+
+const updatePartialTeamMapping = function (request, team) {
+    if (request.body && request.body.country) {
+        team.country = request.body.country;
+    }
+    if (request.body && request.body.yearEstablished) {
+        team.yearEstablished = request.body.yearEstablished;
+    }
+    if (request.body && request.body.totalWorldCupWon) {
+        team.totalWorldCupWon = request.body.totalWorldCupWon;
+    }
+    if (request.body && request.body.players) {
+        team.players = request.body.players?.map(player => ({
+            name: player.name,
+            age: player.age,
+            yearJoined: player.yearJoined
+        }));
+    }
+}
+
+const updateFullTeamMapping = function (team, request) {
+    team.country = request.body.country;
+    team.yearEstablished = request.body.yearEstablished;
+    team.totalWorldCupWon = request.body.totalWorldCupWon;
+    team.players = request.body.players?.map(player => ({
+        name: player.name,
+        age: player.age,
+        yearJoined: player.yearJoined
+    }));
 }
