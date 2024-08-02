@@ -1,7 +1,7 @@
 require("dotenv").config();
-require("./data/db")
+require("./components/data/db")
 const express = require("express");
-const router = require("./router");
+const router = require("./components/router");
 
 const app = express();
 const env = process.env;

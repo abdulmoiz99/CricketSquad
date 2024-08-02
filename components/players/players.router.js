@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router();
-const playersController = require("../controllers/players")
+const playersController = require("./player.controller")
 
 router.route("/teams/:Id/players")
     .get(playersController.getAll)

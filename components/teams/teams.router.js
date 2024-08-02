@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router();
-const teamsController = require("../controllers/teams")
+const teamsController = require("./teams.controller")
 
 router.route("/teams")
     .get(teamsController.getAll)

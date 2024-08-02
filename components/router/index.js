@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router();
-const playersRouter = require("./players.router")
-const teamsRouter = require("./teams.router")
+const playersRouter = require("../players/players.router")
+const teamsRouter = require("../teams/teams.router")
 
 router.use("/", teamsRouter);
 
