@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 require("../teams/teams.model");
+require("../users/users.model");
 const callbackify = require("util").callbackify;
 const env = process.env;
 
