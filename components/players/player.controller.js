@@ -8,9 +8,6 @@ const Team = mongoose.model(env.TEAM_MODEL);
 const TeamFindByIdExecCallback = callbackify(function (teamId) {
     return Team.findById(teamId).exec();
 })
-const TeamFindByIdAndUpdateExecCallBack = callbackify(function (id, player) {
-    return Team.findByIdAndUpdate(id, player).exec();
-})
 
 const TeamSaveCallBack = callbackify(function (teams) {
     return teams.save();
@@ -37,56 +34,68 @@ const getAll = function (request, response) {
 
     const teamId = request.params.Id;
 
-    if (!mongoose.Types.ObjectId.isValid(teamId)) {
-        return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_TEAM_ID);
-    }
-
-    TeamFindByIdExecCallback(teamId, function (error, teams) {
-        if (error) {
-            console.log(error)
-            return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
-        }
-        else if (!teams || teams.length === 0) {
-            return responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND);
-        }
-        return responseHelper.sendSuccess(response, teams.players);
-    });
+    _validateTeamId(teamId)
+        .then(id => { return Team.findById(id) })
+        .catch(error => responseHelper.sendError(response, env.NOT_FOUND, env.PROVIDE_VALID_TEAM_ID))
+        .then(team => _validateTeamLength(team))
+        .catch(error => responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND))
+        .then(team => responseHelper.sendSuccess(response, team.players))
+        .catch(error => responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR))
 }
 
-const deleteOne = function (request, response) {
+const _validateTeamId = function (teamId) {
+    return new Promise((resolve, reject) => {
+        if (!mongoose.Types.ObjectId.isValid(teamId)) {
+            reject();
+        }
+        else {
+            resolve(teamId)
+        }
+    })
+}
+const _validateTeamLength = function (team) {
+    return new Promise((resolve, reject) => {
+        if (!team || team.length === 0) {
+            reject()
+        }
+        else resolve(team);
+    })
+}
+const _validatePlayer = function (team, playerId) {
+    return new Promise((resolve, reject) => {
+        const deletedPlayer = team.players.id(playerId);
+        if (!deletedPlayer) {
+            console.log("Invalid player")
+            reject()
+        }
+        resolve(team);
+    })
+}
+const deleteOne = function (request, res) {
     console.log("players deleteOne controller");
     const teamId = request.params.teamId;
     const playerId = request.params.playerId;
 
-    if (!mongoose.Types.ObjectId.isValid(teamId)) {
-        return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_TEAM_ID);
-    }
-    if (!mongoose.Types.ObjectId.isValid(playerId)) {
-        return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_PLAYER_ID);
-    }
-    TeamFindByIdExecCallback(teamId, function (err, teams) {
-        if (err)
-            res.status(env.INTERNAL_SERVER).json({ message: err });
-        else if (teams == null)
-            res.status(env.NOT_FOUND).json({ message: 'team not found!' });
-        else {
-            const deletedPlayer = teams.players.id(playerId);
-            if (!deletedPlayer) {
-                return responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND);
-            }
-
-            TeamFindByIdAndUpdateExecCallBack(teams, { $pull: { players: { _id: playerId } } }, function (error, player) {
-                if (error) {
-                    console.log(error);
-                    return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
-                } else {
-                    return responseHelper.sendSuccess(response, env.PLAYER_DELETED_SUCCESSFULLY);
-                }
-            });
-        }
+    Team.findById(teamId)
+        .then(team => _validatePlayer(team, playerId))
+        .then(team => Team.findByIdAndUpdate(team, { $pull: { players: { _id: playerId } } }))
+        .catch(() => {
+            console.log("Reached First Catch")
+            responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND)
+        })
+        .then(player => responseHelper.sendSuccess(response, env.PLAYER_DELETED_SUCCESSFULLY))
+        .catch(error => {
+            console.log("Reached Second Catch")
+            res.status(500).json({ message: error })
+        })
+}
+const _validateTeam = function (team) {
+    return new Promise((resolve, reject) => {
+        if (team == null)
+            reject()
+        else resolve(team)
     })
 }
-
 const addOne = function (request, response) {
     console.log("players addOne controller");
     const teamId = request.params.Id;
@@ -109,28 +118,41 @@ const addOne = function (request, response) {
     else {
         return responseHelper.sendError(response, env.BAD_REQUEST, env.MISSING_REQUEST_BODY);
     }
-    TeamFindByIdExecCallback(teamId, function (error, teams) {
-        if (error) {
-            console.log()
-            return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
-        }
-        else if (teams == null)
-            return responseHelper.sendError(response, env.NOT_FOUND, env.TEAM_NOT_FOUND);
-        else {
-            teams.players.push(newPlayer);
-            TeamSaveCallBack(teams, function (error, player) {
-                if (error) {
-                    console.log(error);
-                    return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
 
-                } else {
-                    return responseHelper.sendSuccess(response, player);
-                }
-            });
-        }
-    })
+    Team.findById(teamId)
+        .then(team => _validateTeam(team))
+        .then(team => {
+            team.players.push(newPlayer);
+            team.save();
+        })
+        .then(_ => responseHelper.sendSuccess(response, player))
+        .catch(error => responseHelper.sendError(response, env.NOT_FOUND, env.TEAM_NOT_FOUND))
+        .catch(error => responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR))
+
+
+    // TeamFindByIdExecCallback(teamId, function (error, teams) {
+    //     if (error) {
+    //         console.log()
+    //         return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
+    //     }
+    //     else if (teams == null)
+    //         return responseHelper.sendError(response, env.NOT_FOUND, env.TEAM_NOT_FOUND);
+    //     else {
+    //         teams.players.push(newPlayer);
+    //         TeamSaveCallBack(teams, function (error, player) {
+    //             if (error) {
+    //                 console.log(error);
+    //                 return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
+
+    //             } else {
+    //                 return responseHelper.sendSuccess(response, player);
+    //             }
+    //         });
+    //     }
+    // })
 
 }
+
 
 const updateOne = function (request, response) {
     console.log("updateOne player controller");
