@@ -5,30 +5,6 @@ const callbackify = require("util").callbackify
 const env = process.env
 const Team = mongoose.model(env.TEAM_MODEL);
 
-const TeamFindByIdExecCallback = callbackify(function (teamId) {
-    return Team.findById(teamId).exec();
-})
-
-const TeamSaveCallBack = callbackify(function (teams) {
-    return teams.save();
-})
-const TeamUpdateOneExecCallback = callbackify(function (teamId, playerId, updatedPlayer) {
-    const filter = { _id: teamId, "players._id": playerId };
-    const update = {};
-
-    if (updatedPlayer.name !== null) {
-        update["players.$.name"] = updatedPlayer.name;
-    }
-    if (updatedPlayer.age !== null) {
-        update["players.$.age"] = updatedPlayer.age;
-    }
-    if (updatedPlayer.yearJoined !== null) {
-        update["players.$.yearJoined"] = updatedPlayer.yearJoined;
-    }
-
-    return Team.findOneAndUpdate(filter, update);
-})
-
 const getAll = function (request, response) {
     console.log("players getAll")
 
@@ -80,12 +56,10 @@ const deleteOne = function (request, res) {
         .then(team => _validatePlayer(team, playerId))
         .then(team => Team.findByIdAndUpdate(team, { $pull: { players: { _id: playerId } } }))
         .catch(() => {
-            console.log("Reached First Catch")
             responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND)
         })
         .then(player => responseHelper.sendSuccess(response, env.PLAYER_DELETED_SUCCESSFULLY))
         .catch(error => {
-            console.log("Reached Second Catch")
             res.status(500).json({ message: error })
         })
 }
@@ -183,16 +157,33 @@ const updateOne = function (request, response) {
     else {
         return responseHelper.sendError(response, env.BAD_REQUEST, env.MISSING_REQUEST_BODY);
     }
+    const filter = { _id: teamId, "players._id": playerId };
+    const update = {};
 
-    TeamUpdateOneExecCallback(teamId, playerId, updatedPlayer, function (error, teams) {
-        if (error) {
-            return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
-        }
-        else if (!teams || teams.length === 0) {
-            return responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND);
-        }
-        return responseHelper.sendSuccess(response, env.PLAYER_UPDATED_SUCCESSFULLY);
-    })
+    if (updatedPlayer.name !== null) {
+        update["players.$.name"] = updatedPlayer.name;
+    }
+    if (updatedPlayer.age !== null) {
+        update["players.$.age"] = updatedPlayer.age;
+    }
+    if (updatedPlayer.yearJoined !== null) {
+        update["players.$.yearJoined"] = updatedPlayer.yearJoined;
+    }
+
+    return Team.findOneAndUpdate(filter, update)
+        .then(team => responseHelper.sendSuccess(response, env.PLAYER_UPDATED_SUCCESSFULLY))
+        .catch(error => responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR))
+
+
+    // TeamUpdateOneExecCallback(teamId, playerId, updatedPlayer, function (error, teams) {
+    //     if (error) {
+    //         return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
+    //     }
+    //     else if (!teams || teams.length === 0) {
+    //         return responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND);
+    //     }
+    //     return responseHelper.sendSuccess(response, env.PLAYER_UPDATED_SUCCESSFULLY);
+    // })
 }
 
 module.exports = {
