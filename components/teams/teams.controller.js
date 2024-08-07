@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const responseHelper = require("../responseHelper");
+const responseHelper = require("../Utility/responseHelper");
 const callbackify = require("util").callbackify
 
 const env = process.env

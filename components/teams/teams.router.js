@@ -1,8 +1,6 @@
 const express = require("express")
 const router = express.Router();
-const teamsController = require("./controllers/teams")
-const playersController = require("./controllers/players")
-
+const teamsController = require("./teams.controller")
 
 router.route("/teams")
     .get(teamsController.getAll)
@@ -13,15 +11,5 @@ router.route("/teams/:Id")
     .delete(teamsController.deleteOne)
     .patch(teamsController.partialUpdate)
     .put(teamsController.fullUpdate)
-
-
-router.route("/teams/:Id/players")
-    .get(playersController.getAll)
-    .post(playersController.addOne)
-
-
-router.route("/teams/:teamId/players/:playerId")
-    .delete(playersController.deleteOne)
-    .patch(playersController.updateOne)
 
 module.exports = router;
