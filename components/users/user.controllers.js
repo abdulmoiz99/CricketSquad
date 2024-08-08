@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const responseHelper = require("../Utility/responseHelper");
 const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
 const _env = process.env
 const User = mongoose.model(_env.USER_MODEL);
 
@@ -20,7 +21,48 @@ const createUser = function (request, response) {
         .then(user => responseHelper.sendSuccess(response, user))
         .catch(error => responseHelper.sendError(response, _env.INTERNAL_SERVER, error))
 }
+const _validateIfUserExists = function (user) {
+    return new Promise((resolve, reject) => {
+        if (user) {
+            resolve(user);
+        }
+        else reject();
+    })
+}
+
+const _validatePasswordMatch = function (passwordMatch) {
+    return new Promise((resolve, reject) => {
+        if (passwordMatch) resolve()
+        else reject()
+    })
+}
+
+const _generateJWT = function (username) {
+    return new Promise((resolve, reject) => {
+        const token = jwt.sign(username, "MWA")
+        console.log(token)
+        resolve(token)
+    })
+}
+const authenticateUser = function (req, res) {
+    console.log("Authenticate User")
+
+    const username = req.body.username;
+    const password = req.body.password;
+
+    User.findOne({ username: username })
+        .then((databaseUser) => _validateIfUserExists(databaseUser))
+        .then((databaseUser) => bcrypt.compare(password, databaseUser.password))
+        .then((passwordMatch) => _validatePasswordMatch(passwordMatch))
+        .then(_ => _generateJWT(username))
+        .then(token => res.status(201).json({ "token": token }))
+        .catch(error => {
+            console.log(error)
+            res.status(401).json("Unauthorized")
+        })
+}
 
 module.exports = {
-    createUser
+    createUser,
+    authenticateUser,
 }
