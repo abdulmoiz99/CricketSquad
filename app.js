@@ -10,11 +10,11 @@ app.listen(env.PORT);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/", function (req, res, next) {
+app.use("/api", function (req, res, next) {
     res.header('Access-Control-Allow-Origin', 'http://localhost:4200');
     next();
 });
 
-app.use("/", router);
+app.use("/api", router);
 
 console.log("Server is listening on http://localhost:" + env.PORT)

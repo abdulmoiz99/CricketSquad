@@ -1,13 +1,11 @@
 const mongoose = require("mongoose");
 require("../teams/teams.model");
 require("../users/users.model");
-const callbackify = require("util").callbackify;
 const env = process.env;
 
 mongoose.connect(env.DB_URL);
 
 
-const mongooseDisconnectWithCallback = callbackify(mongoose.disconnect)
 
 mongoose.connection.on("connected", function () {
     console.log("mongoose connected to", env.DB_URL);
