@@ -40,12 +40,11 @@ const _validatePasswordMatch = function (passwordMatch) {
 const _generateJWT = function (username) {
     return new Promise((resolve, reject) => {
         const token = jwt.sign(username, "MWA")
-        console.log(token)
         resolve(token)
     })
 }
-const authenticateUser = function (req, res) {
-    console.log("Authenticate User")
+const login = function (req, res) {
+    console.log("login User")
 
     const username = req.body.username;
     const password = req.body.password;
@@ -57,12 +56,24 @@ const authenticateUser = function (req, res) {
         .then(_ => _generateJWT(username))
         .then(token => res.status(201).json({ "token": token }))
         .catch(error => {
-            console.log(error)
             res.status(401).json("Unauthorized")
         })
+}
+const authenticateUser = function (req, res) {
+    console.log("authenticate user")
+    const authHeader = req.headers.authorization
+    const token = authHeader.split(' ')[1];
+    try {
+        console.log(jwt.verify(token, "MWA"))
+    }
+    catch (error) {
+        console.log("Unauthorized")
+        res.status(401).json()
+    }
 }
 
 module.exports = {
     createUser,
-    authenticateUser,
+    login,
+    authenticateUser
 }
