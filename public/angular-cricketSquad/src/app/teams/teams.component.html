@@ -1,5 +1,7 @@
 <ul>
-    <li *ngFor="let team of teams">
+    <li *ngFor="let team of teamResponse.teams">
         <a routerLink="/team/{{team._id}}">{{team.country}}</a>
     </li>
 </ul>
+<button (click)="previousTeams()" [disabled]=isPreviousDisable>Previous</button>
+<button (click)="nextTeams()" [disabled]=isNextDisable>Next</button>

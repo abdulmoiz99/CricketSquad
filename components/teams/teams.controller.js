@@ -64,8 +64,17 @@ const getAll = function (request, response) {
             }
         }
     }
+    let responseData = {
+        totalCount: "",
+        teams: "",
+    }
     Team.find().skip(offset).limit(count)
-        .then(teams => responseHelper.sendSuccess(response, teams))
+        .then(teams => {
+            responseData.teams = teams;
+            return Team.countDocuments();
+        })
+        .then(teamCount => responseData.totalCount = teamCount)
+        .then(_ => responseHelper.sendSuccess(response, responseData))
         .catch(error => responseHelper.handleError(response, error))
 }
 
