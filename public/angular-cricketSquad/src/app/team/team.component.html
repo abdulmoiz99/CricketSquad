@@ -1,0 +1,7 @@
+<h1>Country: {{team.country}} - <world-cup-won [worldCupWon]=team.totalWorldCupWon></world-cup-won></h1>
+
+Year established: {{team.yearEstablished}} <br />
+<h1>Players</h1>
+<ul>
+    <li *ngFor="let player of team.players">{{player.name}}</li>
+</ul>
