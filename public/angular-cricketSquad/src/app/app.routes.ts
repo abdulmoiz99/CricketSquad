@@ -4,6 +4,7 @@ import { TeamsComponent } from './teams/teams.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { TeamComponent } from './team/team.component';
 import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "home", pathMatch: "full" },
@@ -11,5 +12,6 @@ export const routes: Routes = [
     { path: "teams", component: TeamsComponent },
     { path: "team/:teamId", component: TeamComponent },
     { path: "register", component: RegisterComponent },
+    { path: "login", component: LoginComponent },
     { path: "**", component: ErrorPageComponent },
 ];

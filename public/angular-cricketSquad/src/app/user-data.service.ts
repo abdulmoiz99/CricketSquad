@@ -14,4 +14,8 @@ export class UserDataService {
   public registerUser(user: object): Observable<any> {
     return this._httpClient.post(`${this._baseUrl}/users`, user)
   }
+
+  public login(user: object): Observable<any> {
+    return this._httpClient.post(`${this._baseUrl}/users/login`, user)
+  }
 }
