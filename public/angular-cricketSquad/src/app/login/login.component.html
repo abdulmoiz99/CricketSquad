@@ -1,5 +1,8 @@
 <form [formGroup]="loginForm" (ngSubmit)="login(loginForm)">
     <br />
+    <div *ngIf="loginSuccessful" class="alert alert-success">
+        Login Successful.
+    </div>
     <div>
         <label>Username</label>
         <br />
@@ -10,8 +13,8 @@
     <div>
         <label>Password</label>
         <br />
-        <input name="password" id="password" formControlName="password">
+        <input name="password" id="password" formControlName="password" type="password">
     </div>
     <br />
-    <button type="submit">Search</button>
+    <button type="submit">Login</button>
 </form>
