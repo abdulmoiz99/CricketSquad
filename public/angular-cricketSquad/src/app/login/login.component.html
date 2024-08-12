@@ -1,20 +1,19 @@
-<form [formGroup]="loginForm" (ngSubmit)="login(loginForm)">
-    <br />
+<form [formGroup]="loginForm" (ngSubmit)="login(loginForm)" class = "mt-4">
+
     <div *ngIf="loginSuccessful" class="alert alert-success">
         Login Successful.
     </div>
-    <div>
-        <label>Username</label>
+    <legend>Login</legend>
+    <div class="mb-3 mt-5">
+        <label class="form-label">Username</label>
         <br />
-        <input name="username" id="username" formControlName="username">
+        <input class="form-control" name="username" id="username" formControlName="username">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        <br />
+        <input class="form-control" name="password" id="password" formControlName="password" type="password">
     </div>
     <br />
-
-    <div>
-        <label>Password</label>
-        <br />
-        <input name="password" id="password" formControlName="password" type="password">
-    </div>
-    <br />
-    <button type="submit">Login</button>
+    <button class="btn btn-primary" type="submit">Login</button>
 </form>
