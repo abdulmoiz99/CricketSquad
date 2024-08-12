@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Team, TeamsResponse } from './teams/teams.component';
 import { Observable } from 'rxjs';
@@ -16,6 +16,9 @@ export class TeamDataService {
     return this._httpClient.get<TeamsResponse>(`${this._baseUrl}/teams?offset=${offset}&count=${limit}`)
   }
   public getTeam(teamId: String): Observable<Team> {
-    return this._httpClient.get<Team>(`${this._baseUrl}/teams/${teamId}`)
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${sessionStorage.getItem(environment.token)}`
+    });
+    return this._httpClient.get<Team>(`${this._baseUrl}/teams/${teamId}`, { headers });
   }
 }
