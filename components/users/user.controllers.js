@@ -62,15 +62,16 @@ const login = function (req, res) {
 const authenticateUser = function (req, res, next) {
     console.log("authenticate user")
     const authHeader = req.headers.authorization
-    const token = authHeader.split(' ')[1];
+    console.log(authHeader)
     try {
+        const token = authHeader.split(' ')[1];
         jwt.verify(token, "MWA")
         next()
 
     }
     catch (error) {
         console.log("Unauthorized")
-        res.status(401)
+        res.status(401).json("Unauthorized")
     }
 }
 

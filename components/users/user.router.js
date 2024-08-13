@@ -6,6 +6,6 @@ router.route("/users")
     .post(usersControllers.createUser)
 
 router.route("/users/login")
-    .get(usersControllers.authenticateUser)
+    .post(usersControllers.login)
 
 module.exports = router;
