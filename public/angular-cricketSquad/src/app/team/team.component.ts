@@ -3,7 +3,6 @@ import { TeamDataService } from '../team-data.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { WorldCupWonComponent } from '../world-cup-won/world-cup-won.component';
-import { environment } from '../../environments/environment';
 import { GenericResponse } from '../../dto/generic-response';
 import { Team } from '../../models/team';
 
@@ -20,10 +19,7 @@ export class TeamComponent implements OnInit {
   constructor(private _activatedRoute: ActivatedRoute, private _teamDataService: TeamDataService) { }
 
   ngOnInit(): void {
-    this.isAuthorized = sessionStorage.getItem(environment.token) ? true : false
-    if (this.isAuthorized) {
-      this.getTeamData()
-    }
+    this.getTeamData()
   }
   getTeamData(): void {
     const teamId: String = this._activatedRoute.snapshot.params["teamId"]

@@ -1,9 +1,13 @@
 const mongoose = require("mongoose");
 const responseHelper = require("../Utility/responseHelper");
+const responseHandler = require("../Utility/responseHandler");
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const _env = process.env
 const User = mongoose.model(_env.USER_MODEL);
+const env = process.env
+
+let _responseObj = {}
 
 const createUser = function (request, response) {
     console.log("addOne user controller");
@@ -70,8 +74,11 @@ const authenticateUser = function (req, res, next) {
 
     }
     catch (error) {
-        console.log("Unauthorized")
-        res.status(401).json("Unauthorized")
+        const errorResponse = {
+            message: env.USER_NOT_AUTHORIZED
+        }
+        _responseObj = responseHandler.getErrorResponse(errorResponse)
+        res.status(_responseObj.statusCode).json(_responseObj.result)
     }
 }
 
