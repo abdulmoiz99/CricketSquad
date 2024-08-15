@@ -8,7 +8,15 @@ export class AuthenticationService {
 
   constructor() { }
 
-  getAuthToken(): String | null {
-    return sessionStorage.getItem(environment.token)
+  getAuthToken(): string | null {
+    return sessionStorage.getItem(environment.token);
+  }
+
+  isLoggedIn(): boolean {
+    return this.getAuthToken() !== null;
+  }
+
+  logout(): void {
+    sessionStorage.removeItem(environment.token);
   }
 }
