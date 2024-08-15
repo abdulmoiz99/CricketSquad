@@ -1,8 +1,12 @@
 const mongoose = require("mongoose");
 const responseHelper = require("../Utility/responseHelper");
+const responseHandler = require("../Utility/responseHandler");
 
 const env = process.env
 const Team = mongoose.model(env.TEAM_MODEL);
+
+
+let _responseObj = {}
 
 const addOne = function (request, response) {
     console.log("addOne controller");
@@ -80,26 +84,28 @@ const getAll = function (request, response) {
 
 const getOne = function (request, response) {
     console.log("getOne controller");
-
     const teamId = request.params.Id;
 
     _validateTeamId(teamId)
-        .then(id => { return Team.findById(teamId) })
-        .catch(error => responseHelper.sendError(response, env.NOT_FOUND, env.PROVIDE_VALID_TEAM_ID))
-        .then(team => _validateTeamLength(team))
-        .catch(error => responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND))
-        .then(team => responseHelper.sendSuccess(response, team))
-        .catch(error => responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR))
+        .then(id => { return Team.findById(id); })
+        .then(team => {
+            if (!team) {
+                throw new Error(env.NO_RECORD_FOUND);
+            }
+            return _validateTeamLength(team);
+        })
+        .then(team => _responseObj = responseHandler.getSuccessResponse(team))
+        .catch(error => { _responseObj = responseHandler.getErrorResponse(error) })
+        .finally(_ => response.status(_responseObj.statusCode).json(_responseObj.result))
 }
 const _validateTeamId = function (teamId) {
     return new Promise((resolve, reject) => {
         if (!mongoose.Types.ObjectId.isValid(teamId)) {
-            reject();
+            reject(new Error(env.PROVIDE_VALID_TEAM_ID));
+        } else {
+            resolve(teamId);
         }
-        else {
-            resolve(teamId)
-        }
-    })
+    });
 }
 const _validateTeamLength = function (team) {
     return new Promise((resolve, reject) => {
@@ -114,17 +120,22 @@ const deleteOne = function (request, response) {
     const teamId = request.params.Id;
 
     _validateTeamId(teamId)
-        .then(id => { return Team.deleteOne({ _id: id }) })
-        .catch(error => responseHelper.sendError(response, env.NOT_FOUND, env.PROVIDE_VALID_TEAM_ID))
+        .then(id => {
+            console.log(id)
+            return Team.deleteOne({ _id: id })
+        })
         .then(team => _validateDeleteCount(team))
-        .then(team => responseHelper.sendSuccess(response, { message: env.RECORD_DELETED_SUCCESSFULLY }))
-        .catch(error => responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND))
-        .catch(error => responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR))
+        .then(_ => responseHandler.getSuccessResponse(env.RECORD_DELETED_SUCCESSFULLY))
+        .catch(error => {
+            _responseObj = responseHandler.getErrorResponse(error)
+        })
+        .finally(_ => response.status(_responseObj.statusCode).json(_responseObj.result))
 }
 const _validateDeleteCount = function (team) {
+    console.log(team)
     return new Promise((resolve, reject) => {
         if (team.deletedCount === 0) {
-            reject();
+            reject(new Error(env.NO_RECORD_FOUND));
         }
         else resolve(team)
     })
@@ -155,8 +166,6 @@ const fullUpdate = function (request, response) {
     console.log("fullUpdate teams controller");
     _update(request, response, updateFullTeamMapping);
 }
-
-
 
 const _updatePartialTeamMapping = function (request, team) {
     return new Promise((resolve, reject) => {
