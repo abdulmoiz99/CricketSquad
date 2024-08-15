@@ -16,9 +16,6 @@ export class TeamDataService {
     return this._httpClient.get<TeamsResponse>(`${this._baseUrl}/teams?offset=${offset}&count=${limit}`)
   }
   public getTeam(teamId: String): Observable<Team> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${sessionStorage.getItem(environment.token)}`
-    });
-    return this._httpClient.get<Team>(`${this._baseUrl}/teams/${teamId}`, { headers });
+    return this._httpClient.get<Team>(`${this._baseUrl}/teams/${teamId}`);
   }
 }
