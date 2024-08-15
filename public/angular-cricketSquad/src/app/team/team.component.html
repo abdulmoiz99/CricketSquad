@@ -1,15 +1,14 @@
-<div *ngIf="isAuthorized">
-    <h1>Country: {{team.country}} - <world-cup-won [worldCupWon]=team.totalWorldCupWon></world-cup-won></h1>
+<div *ngIf="teamResponse.success">
+    <h1>Country: {{teamResponse.data.country}} - <world-cup-won
+            [worldCupWon]=teamResponse.data.totalWorldCupWon></world-cup-won></h1>
 
-    Year established: {{team.yearEstablished}} <br />
+    Year established: {{teamResponse.data.yearEstablished}} <br />
     <h1>Players</h1>
-</div>
-<div *ngIf="!isAuthorized" class="alert alert-danger">
-    Unauthorized, please login first.
 </div>
 
 <ol class="list-group list-group-numbered">
-    <li class="list-group-item d-flex justify-content-between align-items-start" *ngFor="let player of team.players">
+    <li class="list-group-item d-flex justify-content-between align-items-start"
+        *ngFor="let player of teamResponse.data.players">
         <div class="ms-2 me-auto">
             <div class="fw-bold">{{player.name}}</div>
         </div>
