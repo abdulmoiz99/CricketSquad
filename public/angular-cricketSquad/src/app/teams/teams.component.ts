@@ -3,14 +3,8 @@ import { TeamDataService } from '../team-data.service';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Team } from '../../models/team';
-
-
-export class TeamsResponse {
-  #totalCount!: number;
-  #teams!: [Team]
-  get totalCount() { return this.#totalCount; }
-  get teams() { return this.#teams; }
-}
+import { GenericResponse } from '../../dto/generic-response';
+import { TeamsResponse } from '../../dto/team-response';
 
 @Component({
   selector: 'app-teams',
@@ -19,10 +13,9 @@ export class TeamsResponse {
   templateUrl: './teams.component.html',
   styleUrl: './teams.component.css'
 })
-
 export class TeamsComponent implements OnInit {
 
-  teamResponse!: TeamsResponse;
+  teamResponse!: GenericResponse<TeamsResponse>;
   offset: number = 0;
   limit: number = 5;
   isNextDisable: Boolean = false;
@@ -47,7 +40,7 @@ export class TeamsComponent implements OnInit {
   }
   private updateButtons(): void {
     this.isPreviousDisable = this.offset == 0
-    this.isNextDisable = this.teamResponse.totalCount < this.offset + this.limit
+    this.isNextDisable = this.teamResponse.data.totalCount < this.offset + this.limit
   }
   public nextTeams(): void {
     if (!this.isNextDisable) {

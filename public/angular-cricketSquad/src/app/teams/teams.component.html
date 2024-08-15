@@ -2,7 +2,7 @@
     <a class="list-group-item list-group-item-action active">
         Cricket Teams
     </a>
-    <div *ngFor="let team of teamResponse.teams">
+    <div *ngFor="let team of teamResponse.data.teams">
         <a routerLink="/team/{{team._id}}" class="list-group-item list-group-item-action">{{team.country}}</a>
     </div>
 

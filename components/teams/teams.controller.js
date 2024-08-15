@@ -68,7 +68,7 @@ const getAll = function (request, response) {
             }
         }
     }
-    let responseData = {
+    const responseData = {
         totalCount: "",
         teams: "",
     }
@@ -78,10 +78,13 @@ const getAll = function (request, response) {
             return Team.countDocuments();
         })
         .then(teamCount => responseData.totalCount = teamCount)
-        .then(_ => responseHelper.sendSuccess(response, responseData))
-        .catch(error => responseHelper.handleError(response, error))
+        .then(_ => _responseObj = responseHandler.getSuccessResponse(responseData))
+        .catch(error => _responseObj = responseHandler.getErrorResponse(error))
+        .finally(_ => _sendResponse(response, _responseObj))
 }
-
+const _sendResponse = function (response, responseObj) {
+    return response.status(_responseObj.statusCode).json(_responseObj.result)
+}
 const getOne = function (request, response) {
     console.log("getOne controller");
     const teamId = request.params.Id;
@@ -96,7 +99,7 @@ const getOne = function (request, response) {
         })
         .then(team => _responseObj = responseHandler.getSuccessResponse(team))
         .catch(error => { _responseObj = responseHandler.getErrorResponse(error) })
-        .finally(_ => response.status(_responseObj.statusCode).json(_responseObj.result))
+        .finally(_ => _sendResponse(response, _responseObj))
 }
 const _validateTeamId = function (teamId) {
     return new Promise((resolve, reject) => {
