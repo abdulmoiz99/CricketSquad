@@ -16,7 +16,7 @@ const _getErrorDetails = function (errorMessage) {
         case env.NO_RECORD_FOUND:
             return errorResponse = { statusCode: env.NOT_FOUND, message: env.NO_RECORD_FOUND }
         case env.TEAM_NOT_FOUND:
-            return errorResponse = { statusCode: env.TEAM_NOT_FOUND, message: env.NO_RECORD_FOUND }
+            return errorResponse = { statusCode: env.NOT_FOUND, message: env.TEAM_NOT_FOUND }
         case env.PROVIDE_VALID_TEAM_ID:
             return errorResponse = { statusCode: env.BAD_REQUEST, message: env.PROVIDE_VALID_TEAM_ID }
         case env.USER_NOT_AUTHORIZED:

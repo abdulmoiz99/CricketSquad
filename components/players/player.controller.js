@@ -24,12 +24,11 @@ const getAll = function (request, response) {
 const _validateTeamId = function (teamId) {
     return new Promise((resolve, reject) => {
         if (!mongoose.Types.ObjectId.isValid(teamId)) {
-            reject();
+            reject(new Error(env.PROVIDE_VALID_TEAM_ID));
+        } else {
+            resolve(teamId);
         }
-        else {
-            resolve(teamId)
-        }
-    })
+    });
 }
 const _validateTeamLength = function (team) {
     return new Promise((resolve, reject) => {
@@ -80,9 +79,6 @@ const addOne = function (request, response) {
     console.log("players addOne controller");
     const teamId = request.params.Id;
 
-    if (!mongoose.Types.ObjectId.isValid(teamId)) {
-        return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_TEAM_ID);
-    }
     const newPlayer = {};
     if (request.body && Object.keys(request.body).length != 0) {
         if (request.body.name !== null) {
@@ -96,10 +92,11 @@ const addOne = function (request, response) {
         }
     }
     else {
-        return responseHelper.sendError(response, env.BAD_REQUEST, env.MISSING_REQUEST_BODY);
+        _responseObj = responseHandler.getCustomResponse(env.BAD_REQUEST, env.MISSING_REQUEST_BODY, false)
+        return _sendResponse(response, _responseObj)
     }
-
-    Team.findById(teamId)
+    _validateTeamId(teamId)
+        .then(teamId => { return Team.findById(teamId) })
         .then(team => _validateTeam(team))
         .then(team => {
             team.players.push(newPlayer);
