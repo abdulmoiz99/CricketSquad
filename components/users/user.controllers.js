@@ -22,9 +22,15 @@ const createUser = function (request, response) {
         .then(salt => bcrypt.hashSync(newUser.password, salt))
         .then(hash => newUser.password = hash)
         .then(_ => User.create(newUser))
-        .then(user => responseHelper.sendSuccess(response, user))
-        .catch(error => responseHelper.sendError(response, _env.INTERNAL_SERVER, error))
+        .then(user => _responseObj = responseHandler.getSuccessResponseWithMessage("User registered Successfully", {}))
+        .catch(error => _responseObj = responseHandler.getCustomResponse(409, "Username already exist.", false))
+        .finally(_ => _sendResponse(response, _responseObj))
 }
+
+const _sendResponse = function (response, responseObj) {
+    return response.status(_responseObj.statusCode).json(_responseObj.result)
+}
+
 const _validateIfUserExists = function (user) {
     return new Promise((resolve, reject) => {
         if (user) {

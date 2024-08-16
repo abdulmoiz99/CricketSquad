@@ -20,6 +20,7 @@ const _getErrorDetails = function (errorMessage) {
         case env.USER_NOT_AUTHORIZED:
             return errorResponse = { statusCode: env.UNAUTHORIZED, message: env.USER_NOT_AUTHORIZED }
         default:
+            console.log(errorMessage)
             return errorResponse = { statusCode: env.INTERNAL_SERVER, message: env.INTERNAL_SERVER_ERROR }
     }
 }
@@ -30,6 +31,28 @@ const getSuccessResponse = function (responseData) {
             success: true,
             message: "",
             data: responseData
+        }
+    }
+    return genericResponse
+}
+
+const getSuccessResponseWithMessage = function (message, responseData) {
+    genericResponse = {
+        statusCode: 200,
+        result: {
+            success: true,
+            message: message,
+            data: responseData
+        }
+    }
+    return genericResponse
+}
+const getCustomResponse = function (statusCode, message, success) {
+    genericResponse = {
+        statusCode: statusCode,
+        result: {
+            success: success,
+            message: message,
         }
     }
     return genericResponse
@@ -50,5 +73,7 @@ const getErrorResponse = function (error) {
 }
 module.exports = {
     getSuccessResponse,
-    getErrorResponse
+    getErrorResponse,
+    getSuccessResponseWithMessage,
+    getCustomResponse,
 }
