@@ -7,7 +7,11 @@
     </div>
 
 </div>
-<div class="d-grid gap-1 d-md-flex ">
-    <button class="btn btn-primary me-md-2" (click)="previousTeams()" [disabled]=isPreviousDisable>Previous</button>
-    <button class="btn btn-primary" (click)="nextTeams()" [disabled]=isNextDisable>Next</button>
+<div class="d-grid gap-1 d-md-flex justify-content-between">
+
+    <div>
+        <button class="btn btn-primary me-md-2" (click)="previousTeams()" [disabled]=isPreviousDisable>Previous</button>
+        <button class="btn btn-primary" (click)="nextTeams()" [disabled]=isNextDisable>Next</button>
+    </div>
+    <a class="btn btn-success" routerLink="new">Create New Team</a>
 </div>

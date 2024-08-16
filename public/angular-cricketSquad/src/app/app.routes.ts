@@ -5,11 +5,13 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { TeamComponent } from './team/team.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
+import { NewTeamComponent } from './new-team/new-team.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "home", pathMatch: "full" },
     { path: "home", component: HomeComponent },
     { path: "teams", component: TeamsComponent },
+    { path: "teams/new", component: NewTeamComponent },
     { path: "team/:teamId", component: TeamComponent },
     { path: "register", component: RegisterComponent },
     { path: "login", component: LoginComponent },

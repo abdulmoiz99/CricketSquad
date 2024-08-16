@@ -35,8 +35,9 @@ const addOne = function (request, response) {
         return responseHelper.sendError(response, env.BAD_REQUEST, env.MISSING_REQUEST_BODY);
     }
     Team.create(newTeam)
-        .then(team => responseHelper.sendSuccess(response, team))
-        .catch(error => responseHelper.handleError(response, error))
+        .then(_ => _responseObj = responseHandler.getSuccessResponseWithMessage("Team Created Successfully."))
+        .catch(error => _responseObj = responseHandler.getErrorResponse(error))
+        .finally(_ => _sendResponse(response, _responseObj))
 }
 
 const getAll = function (request, response) {
