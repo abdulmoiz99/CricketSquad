@@ -27,4 +27,10 @@ export class TeamComponent implements OnInit {
       this.teamResponse = teamResponse
     })
   }
+  deleteTeam(): void {
+    const teamId: String = this._activatedRoute.snapshot.params["teamId"]
+    this._teamDataService.deleteTeam(teamId).subscribe(teamResponse => {
+      console.log(teamResponse)
+    })
+  }
 }

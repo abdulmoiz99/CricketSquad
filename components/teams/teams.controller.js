@@ -83,7 +83,7 @@ const getAll = function (request, response) {
         .finally(_ => _sendResponse(response, _responseObj))
 }
 const _sendResponse = function (response, responseObj) {
-    return response.status(_responseObj.statusCode).json(_responseObj.result)
+    return response.status(responseObj.statusCode).json(responseObj.result)
 }
 const getOne = function (request, response) {
     console.log("getOne controller");
@@ -123,19 +123,13 @@ const deleteOne = function (request, response) {
     const teamId = request.params.Id;
 
     _validateTeamId(teamId)
-        .then(id => {
-            console.log(id)
-            return Team.deleteOne({ _id: id })
-        })
+        .then(id => { return Team.deleteOne({ _id: id }) })
         .then(team => _validateDeleteCount(team))
-        .then(_ => responseHandler.getSuccessResponse(env.RECORD_DELETED_SUCCESSFULLY))
-        .catch(error => {
-            _responseObj = responseHandler.getErrorResponse(error)
-        })
-        .finally(_ => response.status(_responseObj.statusCode).json(_responseObj.result))
+        .then(_ => _responseObj = responseHandler.getSuccessResponseWithMessage(env.RECORD_DELETED_SUCCESSFULLY))
+        .catch(error => _responseObj = responseHandler.getErrorResponse(error))
+        .finally(_ => _sendResponse(response, _responseObj))
 }
 const _validateDeleteCount = function (team) {
-    console.log(team)
     return new Promise((resolve, reject) => {
         if (team.deletedCount === 0) {
             reject(new Error(env.NO_RECORD_FOUND));

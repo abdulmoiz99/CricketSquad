@@ -20,4 +20,7 @@ export class TeamDataService {
   public getTeam(teamId: String): Observable<GenericResponse<Team>> {
     return this._httpClient.get<GenericResponse<Team>>(`${this._baseUrl}/teams/${teamId}`);
   }
+  public deleteTeam(teamId: String): Observable<GenericResponse<Team>> {
+    return this._httpClient.delete<GenericResponse<Team>>(`${this._baseUrl}/teams/${teamId}`);
+  }
 }
