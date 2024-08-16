@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const responseHelper = require("../Utility/responseHelper");
 const responseHandler = require("../Utility/responseHandler");
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")

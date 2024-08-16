@@ -7,16 +7,6 @@ const Team = mongoose.model(env.TEAM_MODEL);
 
 
 let _responseObj = {}
-
-const addOne = function (request, response) {
-    console.log("addOne controller");
-
-    _validateNewTeamRequest(request)
-        .then(newTeam => { return Team.create(newTeam) })
-        .then(_ => _responseObj = responseHandler.getSuccessResponseWithMessage("Team Created Successfully."))
-        .catch(error => _responseObj = responseHandler.getErrorResponse(error))
-        .finally(_ => _sendResponse(response, _responseObj))
-}
 const _validateNewTeamRequest = function (request) {
     const newTeam = {};
     return new Promise((resolve, reject) => {
@@ -44,6 +34,27 @@ const _validateNewTeamRequest = function (request) {
         }
     });
 }
+const _sendResponse = function (response, responseObj) {
+    return response.status(responseObj.statusCode).json(responseObj.result)
+}
+const _validateTeamId = function (teamId) {
+    return new Promise((resolve, reject) => {
+        if (!mongoose.Types.ObjectId.isValid(teamId)) {
+            reject(new Error(env.PROVIDE_VALID_TEAM_ID));
+        } else {
+            resolve(teamId);
+        }
+    });
+}
+const addOne = function (request, response) {
+    console.log("addOne controller");
+
+    _validateNewTeamRequest(request)
+        .then(newTeam => { return Team.create(newTeam) })
+        .then(_ => _responseObj = responseHandler.getSuccessResponseWithMessage("Team Created Successfully."))
+        .catch(error => _responseObj = responseHandler.getErrorResponse(error))
+        .finally(_ => _sendResponse(response, _responseObj))
+}
 const getAll = function (request, response) {
     console.log("getAll controller");
     let offset = 0;
@@ -53,25 +64,29 @@ const getAll = function (request, response) {
     if (request.query) {
         if (request.query.offset) {
             if (isNaN(request.query.offset)) {
-                return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_OFFSET);
+                _responseObj = responseHandler.getCustomResponse(env.BAD_REQUEST, env.PROVIDE_VALID_OFFSET, false);
             }
             offset = parseInt(request.query.offset, decimalBase);
             if (offset < 0) {
-                return responseHelper.sendError(response, env.BAD_REQUEST, env.OFFSET_MUST_BE_NON_NEGATIVE);
+                _responseObj = responseHandler.getCustomResponse(env.BAD_REQUEST, env.OFFSET_MUST_BE_NON_NEGATIVE, false);
             }
         }
         if (request.query.count) {
             if (isNaN(request.query.count)) {
-                return responseHelper.sendError(response, env.BAD_REQUEST, env.PROVIDE_VALID_COUNT);
+                _responseObj = responseHandler.getCustomResponse(env.BAD_REQUEST, env.PROVIDE_VALID_COUNT, false);
             }
             count = parseInt(request.query.count, decimalBase);
             if (count <= 0) {
-                return responseHelper.sendError(response, env.BAD_REQUEST, env.COUNT_SHOULD_BE_GREATER_THAN_0);
+                _responseObj = responseHandler.getCustomResponse(env.BAD_REQUEST, env.COUNT_SHOULD_BE_GREATER_THAN_0, false);
             }
             else if (count > 5) {
-                return responseHelper.sendError(response, env.BAD_REQUEST, env.COUNT_SHOULD_NOT_EXCEED_5);
+                _responseObj = responseHandler.getCustomResponse(env.BAD_REQUEST, env.COUNT_SHOULD_NOT_EXCEED_5, false);
             }
         }
+        if (Object.keys(_responseObj).length > 0) {
+            return _sendResponse(response, _responseObj);
+        }
+
     }
     const responseData = {
         totalCount: "",
@@ -87,8 +102,22 @@ const getAll = function (request, response) {
         .catch(error => _responseObj = responseHandler.getErrorResponse(error))
         .finally(_ => _sendResponse(response, _responseObj))
 }
-const _sendResponse = function (response, responseObj) {
-    return response.status(responseObj.statusCode).json(responseObj.result)
+
+const _validateTeamLength = function (team) {
+    return new Promise((resolve, reject) => {
+        if (!team || team.length === 0) {
+            reject()
+        }
+        else resolve(team);
+    })
+}
+const _validateDeleteCount = function (team) {
+    return new Promise((resolve, reject) => {
+        if (team.deletedCount === 0) {
+            reject(new Error(env.NO_RECORD_FOUND));
+        }
+        else resolve(team)
+    })
 }
 const getOne = function (request, response) {
     console.log("getOne controller");
@@ -106,23 +135,7 @@ const getOne = function (request, response) {
         .catch(error => { _responseObj = responseHandler.getErrorResponse(error) })
         .finally(_ => _sendResponse(response, _responseObj))
 }
-const _validateTeamId = function (teamId) {
-    return new Promise((resolve, reject) => {
-        if (!mongoose.Types.ObjectId.isValid(teamId)) {
-            reject(new Error(env.PROVIDE_VALID_TEAM_ID));
-        } else {
-            resolve(teamId);
-        }
-    });
-}
-const _validateTeamLength = function (team) {
-    return new Promise((resolve, reject) => {
-        if (!team || team.length === 0) {
-            reject()
-        }
-        else resolve(team);
-    })
-}
+
 const deleteOne = function (request, response) {
     console.log("deleteOne controller");
     const teamId = request.params.Id;
@@ -134,14 +147,7 @@ const deleteOne = function (request, response) {
         .catch(error => _responseObj = responseHandler.getErrorResponse(error))
         .finally(_ => _sendResponse(response, _responseObj))
 }
-const _validateDeleteCount = function (team) {
-    return new Promise((resolve, reject) => {
-        if (team.deletedCount === 0) {
-            reject(new Error(env.NO_RECORD_FOUND));
-        }
-        else resolve(team)
-    })
-}
+
 
 const partialUpdate = function (request, response) {
     console.log("partialUpdate teams controller");
