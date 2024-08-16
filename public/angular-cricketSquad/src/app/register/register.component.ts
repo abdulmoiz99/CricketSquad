@@ -32,6 +32,7 @@ export class RegisterComponent {
 
     this._service.registerUser(user).subscribe(response => {
       this.registrationResponse = response;
+      if (response.success) form.reset()
     })
 
   }

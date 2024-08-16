@@ -36,7 +36,6 @@ export class NewPlayerComponent implements OnInit {
     }
     this._service.newPlayer(teamId, player).subscribe(response => {
       this.response = response;
-      console.log(response)
       form.reset();
     })
   }
