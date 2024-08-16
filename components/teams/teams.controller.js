@@ -61,6 +61,7 @@ const getAll = function (request, response) {
     let count = 5;
     const decimalBase = 10;
 
+    _responseObj = {};
     if (request.query) {
         if (request.query.offset) {
             if (isNaN(request.query.offset)) {

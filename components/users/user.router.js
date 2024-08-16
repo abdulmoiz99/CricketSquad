@@ -5,7 +5,7 @@ const usersControllers = require("./user.controllers")
 router.route(process.env.USERS_URL)
     .post(usersControllers.createUser)
 
-router.route(process.env.USERS_LOGIN_LOGIN)
+router.route(process.env.USERS_LOGIN_URL)
     .post(usersControllers.login)
 
 module.exports = router;
