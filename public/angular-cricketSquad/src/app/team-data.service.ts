@@ -38,8 +38,8 @@ export class TeamDataService {
         catchError(this.handleError)
       );
   }
-  public newPlayer(player: object): Observable<GenericResponse<String>> {
-    return this._httpClient.post<GenericResponse<String>>(`${this._baseUrl}/teams/66a59c334ac250bb43a9d718/players`, player)
+  public newPlayer(teamId: string, player: object): Observable<GenericResponse<String>> {
+    return this._httpClient.post<GenericResponse<String>>(`${this._baseUrl}/teams/${teamId}/players`, player)
       .pipe(
         catchError(this.handleError)
       );

@@ -98,10 +98,8 @@ const addOne = function (request, response) {
             team.players.push(newPlayer);
             team.save();
         })
-        .then(player => _responseObj = responseHandler.getSuccessResponse(player))
-        .catch(error => {
-            _responseObj = responseHandler.getErrorResponse(error)
-        })
+        .then(_ => _responseObj = responseHandler.getSuccessResponseWithMessage(env.PLAYER_ADDED_SUCCESSFULLY, {}))
+        .catch(error => { _responseObj = responseHandler.getErrorResponse(error) })
         .finally(_ => _sendResponse(response, _responseObj))
 }
 

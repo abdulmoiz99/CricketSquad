@@ -5,5 +5,6 @@ export const environment = {
     pageLimit: 5,
     offset: 0,
     teamIdParamName: "teamId",
-    homePageURL: "/home"
+    homePageURL: "/home",
+    teamsPageURL: "/teams"
 };
