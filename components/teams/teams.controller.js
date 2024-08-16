@@ -158,7 +158,6 @@ const _update = function (request, response, updateTeamMapping) {
         .then(team => team.save())
         .then(team => responseHelper.sendSuccess(response, { message: env.RECORD_UPDATED_SUCCESSFULLY }))
         .catch(error => {
-            console.log(error)
             responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR)
         })
 }

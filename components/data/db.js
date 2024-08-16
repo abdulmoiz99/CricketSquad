@@ -3,30 +3,29 @@ require("../teams/teams.model");
 require("../users/users.model");
 const env = process.env;
 
-mongoose.connect(env.DB_URL);
-
-
+mongoose.connect(process.env.DB_URL);
 
 mongoose.connection.on("connected", function () {
-    console.log("mongoose connected to", env.DB_URL);
+    console.log("Mongoose connected to", env.DB_URL);
 })
 
-mongoose.connection.on("disconnect", function () {
-    console.log("mongoose disconnected");
+mongoose.connection.on("disconnected", function () {
+    console.log("Mongoose disconnected");
 })
+
 mongoose.connection.on("error", function (error) {
-    console.log("mongoose connection error", error);
+    console.log("Mongoose error", error);
 })
 
 process.on("SIGINT", function () {
-    // console.log("Reaching SIGINT")
-    // mongooseDisconnectWithCallback((error) => {
-    //     if (error) {
-    //         console.error("Error disconnecting mongoose:", error);
-    //         process.exit(1);
-    //     } else {
-    //         console.log("Mongoose disconnected");
-    //         process.exit(0);
-    //     }
-    // });
+    mongoose.disconnect().then(process.exit(0));
 })
+
+process.on("SIGTERM", function () {
+    mongoose.disconnect().then(process.exit(0));
+})
+
+process.on("SIGUSR2", function () {
+    mongoose.disconnect().then(process.kill(process.pid, "SIGUSR2"));
+})
+
