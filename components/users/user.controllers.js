@@ -64,10 +64,12 @@ const login = function (req, res) {
         .then((databaseUser) => bcrypt.compare(password, databaseUser.password))
         .then((passwordMatch) => _validatePasswordMatch(passwordMatch))
         .then(_ => _generateJWT(username))
-        .then(token => res.status(201).json({ "token": token }))
+        .then(token => _responseObj = responseHandler.getSuccessResponse({ "token": token }))
         .catch(error => {
-            res.status(401).json("Unauthorized")
+            console.log(error)
+            _responseObj = responseHandler.getCustomResponse(401, "Invalid Username or Password.", false)
         })
+        .finally(_ => _sendResponse(res, _responseObj))
 }
 const authenticateUser = function (req, res, next) {
     console.log("authenticate user")

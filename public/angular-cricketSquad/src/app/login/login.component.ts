@@ -3,6 +3,10 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserDataService } from '../user-data.service';
 import { environment } from '../../environments/environment';
 import { CommonModule } from '@angular/common';
+import { AuthenticationService } from '../authentication.service';
+import { GenericResponse } from '../../dto/generic-response';
+import { LoginResponse } from '../../dto/login-response';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,8 +17,11 @@ import { CommonModule } from '@angular/common';
 })
 export class LoginComponent {
   loginForm!: FormGroup;
-  loginSuccessful: Boolean = false;
-  constructor(private _service: UserDataService) { }
+  loginResponse!: GenericResponse<LoginResponse>;
+  constructor(
+    private _userService: UserDataService,
+    private _authenticationService: AuthenticationService,
+    private _router: Router) { }
   ngOnInit(): void {
     this.loginForm = new FormGroup({
       username: new FormControl,
@@ -22,14 +29,18 @@ export class LoginComponent {
     })
   }
   public login(form: FormGroup) {
-    this.loginSuccessful = false;
-    const user = {
-      username: form.value.username,
-      password: form.value.password,
+    if (this.loginForm.invalid) {
+      return;
     }
-    this._service.login(user).subscribe(response => {
-      this.loginSuccessful = true;
-      form.reset();
-    })
+
+    const userCredentials = this.loginForm.value;
+    this._userService.login(userCredentials).subscribe(response => {
+      this.loginResponse = response;
+
+      if (response.success) {
+        this._authenticationService.logIn(response.data.token);
+        this._router.navigate([environment.homePageURL]);
+      }
+    });
   }
 }

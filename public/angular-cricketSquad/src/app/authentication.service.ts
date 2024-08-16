@@ -19,4 +19,7 @@ export class AuthenticationService {
   logout(): void {
     sessionStorage.removeItem(environment.token);
   }
+  logIn(authenticationToken: string): void {
+    sessionStorage.setItem(environment.token, authenticationToken);
+  }
 }

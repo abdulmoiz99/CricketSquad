@@ -3,5 +3,7 @@ export const environment = {
     baseUrl: "http://localhost:3000/api",
     token: "userToken",
     pageLimit: 5,
-    offset: 0
+    offset: 0,
+    teamIdParamName: "teamId",
+    homePageURL: "/home"
 };

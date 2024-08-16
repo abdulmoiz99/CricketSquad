@@ -3,5 +3,7 @@ export const environment = {
     baseUrl: "api base url here",
     token: "key for session storage",
     pageLimit: 5,
-    offset: 0
+    offset: 0,
+    teamIdParamName: "teamId",
+    homePageURL: "/home"
 };
