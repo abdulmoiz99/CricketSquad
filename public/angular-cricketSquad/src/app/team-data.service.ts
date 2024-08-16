@@ -47,8 +47,8 @@ export class TeamDataService {
   private handleError(error: HttpErrorResponse): Observable<GenericResponse<any>> {
     const errorResponse = new GenericResponse<any>(
       false,
-      error.error.message || 'An unknown error occurred',
-      ""
+      error.error.message,
+      {}
     );
 
     return of(errorResponse);

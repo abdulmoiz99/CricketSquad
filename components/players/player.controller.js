@@ -7,19 +7,6 @@ const Team = mongoose.model(env.TEAM_MODEL);
 
 let _responseObj = {}
 
-const getAll = function (request, response) {
-    console.log("players getAll")
-
-    const teamId = request.params.Id;
-
-    _validateTeamId(teamId)
-        .then(id => { return Team.findById(id) })
-        .catch(error => responseHelper.sendError(response, env.NOT_FOUND, env.PROVIDE_VALID_TEAM_ID))
-        .then(team => _validateTeamLength(team))
-        .catch(error => responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND))
-        .then(team => responseHelper.sendSuccess(response, team.players))
-        .catch(error => responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR))
-}
 
 const _validateTeamId = function (teamId) {
     return new Promise((resolve, reject) => {
@@ -33,7 +20,7 @@ const _validateTeamId = function (teamId) {
 const _validateTeamLength = function (team) {
     return new Promise((resolve, reject) => {
         if (!team || team.length === 0) {
-            reject()
+            reject(new Error(env.NO_RECORD_FOUND))
         }
         else resolve(team);
     })
@@ -47,6 +34,21 @@ const _validatePlayer = function (team, playerId) {
         resolve(team);
     })
 }
+
+
+const getAll = function (request, response) {
+    console.log("players getAll")
+
+    const teamId = request.params.Id;
+
+    _validateTeamId(teamId)
+        .then(id => { return Team.findById(id) })
+        .then(team => _validateTeamLength(team))
+        .then(team => _responseObj = responseHandler.getSuccessResponse(team.players))
+        .catch(error => { _responseObj = responseHandler.getErrorResponse(error) })
+        .finally(_ => _sendResponse(response, _responseObj))
+}
+
 const deleteOne = function (request, res) {
     console.log("players deleteOne controller");
     const teamId = request.params.teamId;
