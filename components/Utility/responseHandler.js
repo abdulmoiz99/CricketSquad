@@ -21,6 +21,8 @@ const _getErrorDetails = function (errorMessage) {
             return errorResponse = { statusCode: env.BAD_REQUEST, message: env.PROVIDE_VALID_TEAM_ID }
         case env.USER_NOT_AUTHORIZED:
             return errorResponse = { statusCode: env.UNAUTHORIZED, message: env.USER_NOT_AUTHORIZED }
+        case env.MISSING_REQUEST_BODY:
+            return errorResponse = { statusCode: env.BAD_REQUEST, message: env.MISSING_REQUEST_BODY }
         default:
             console.log(errorMessage)
             return errorResponse = { statusCode: env.INTERNAL_SERVER, message: env.INTERNAL_SERVER_ERROR }

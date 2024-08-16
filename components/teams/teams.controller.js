@@ -11,35 +11,39 @@ let _responseObj = {}
 const addOne = function (request, response) {
     console.log("addOne controller");
 
-    const newTeam = {};
-
-    if (request.body && Object.keys(request.body).length != 0) {
-        if (request.body.country !== null) {
-            newTeam.country = request.body.country;
-        }
-        if (request.body.yearEstablished !== null) {
-            newTeam.yearEstablished = request.body.yearEstablished;
-        }
-        if (request.body.totalWorldCupWon !== null) {
-            newTeam.totalWorldCupWon = request.body.totalWorldCupWon;
-        }
-        if (request.body.players !== null && request.body.players != undefined) {
-            newTeam.players = request.body.players.map(player => ({
-                name: player.name,
-                age: player.age,
-                yearJoined: player.yearJoined
-            }));
-        }
-    }
-    else {
-        return responseHelper.sendError(response, env.BAD_REQUEST, env.MISSING_REQUEST_BODY);
-    }
-    Team.create(newTeam)
+    _validateNewTeamRequest(request)
+        .then(newTeam => { return Team.create(newTeam) })
         .then(_ => _responseObj = responseHandler.getSuccessResponseWithMessage("Team Created Successfully."))
         .catch(error => _responseObj = responseHandler.getErrorResponse(error))
         .finally(_ => _sendResponse(response, _responseObj))
 }
-
+const _validateNewTeamRequest = function (request) {
+    const newTeam = {};
+    return new Promise((resolve, reject) => {
+        if (request.body && Object.keys(request.body).length != 0) {
+            if (request.body.country !== null) {
+                newTeam.country = request.body.country;
+            }
+            if (request.body.yearEstablished !== null) {
+                newTeam.yearEstablished = request.body.yearEstablished;
+            }
+            if (request.body.totalWorldCupWon !== null) {
+                newTeam.totalWorldCupWon = request.body.totalWorldCupWon;
+            }
+            if (request.body.players !== null && request.body.players != undefined) {
+                newTeam.players = request.body.players.map(player => ({
+                    name: player.name,
+                    age: player.age,
+                    yearJoined: player.yearJoined
+                }));
+            }
+            resolve(newTeam);
+        }
+        else {
+            reject(new Error(env.MISSING_REQUEST_BODY));
+        }
+    });
+}
 const getAll = function (request, response) {
     console.log("getAll controller");
     let offset = 0;
