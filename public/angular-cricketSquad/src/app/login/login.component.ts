@@ -28,7 +28,6 @@ export class LoginComponent {
       password: form.value.password,
     }
     this._service.login(user).subscribe(response => {
-      sessionStorage.setItem(environment.token, response.token)
       this.loginSuccessful = true;
       form.reset();
     })

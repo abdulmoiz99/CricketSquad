@@ -1,8 +1,14 @@
 <form [formGroup]="searchForm" (ngSubmit)="search(searchForm)">
     <legend>Register User</legend>
-    <div *ngIf="registrationResponse?.success" class="alert alert-success">
+    
+    <div *ngIf="registrationResponse && registrationResponse.success === false" class="alert alert-danger">
         {{registrationResponse.message}}
     </div>
+    
+    <div *ngIf="registrationResponse && registrationResponse.success === true" class="alert alert-success">
+        {{registrationResponse.message}}
+    </div>
+
     <div>
         <label class="form-label">Name</label>
         <br />
@@ -19,7 +25,7 @@
     <div>
         <label class="form-label">Password</label>
         <br />
-        <input class="form-control" name="password" id="password" formControlName="password">
+        <input class="form-control" name="password" id="password" formControlName="password" type="password">
     </div>
     <br />
     <button class="btn btn-primary" type="submit">Register</button>
