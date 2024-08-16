@@ -33,7 +33,6 @@ export class TeamComponent implements OnInit {
     const paramName = environment.teamIdParamName;
     const teamId: String = this._activatedRoute.snapshot.params[paramName]
     this._teamDataService.deleteTeam(teamId).subscribe(teamResponse => {
-      console.log(teamResponse)
     })
   }
 }

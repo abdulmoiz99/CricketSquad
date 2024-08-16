@@ -33,7 +33,6 @@ export class UserDataService {
       error.error.message || 'An unknown error occurred',
       ""
     );
-    console.log(errorResponse)
     return of(errorResponse);
   }
 }

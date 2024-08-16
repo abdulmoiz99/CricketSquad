@@ -30,7 +30,6 @@ export class NewPlayerComponent implements OnInit {
       age: form.value.age,
       yearJoined: form.value.yearJoined,
     }
-    console.log(form.value)
     this._service.newPlayer(player).subscribe(response => {
       this.response = response;
       form.reset();

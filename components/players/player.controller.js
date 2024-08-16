@@ -42,7 +42,6 @@ const _validatePlayer = function (team, playerId) {
     return new Promise((resolve, reject) => {
         const deletedPlayer = team.players.id(playerId);
         if (!deletedPlayer) {
-            console.log("Invalid player")
             reject()
         }
         resolve(team);
@@ -107,28 +106,6 @@ const addOne = function (request, response) {
             _responseObj = responseHandler.getErrorResponse(error)
         })
         .finally(_ => _sendResponse(response, _responseObj))
-
-    // TeamFindByIdExecCallback(teamId, function (error, teams) {
-    //     if (error) {
-    //         console.log()
-    //         return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
-    //     }
-    //     else if (teams == null)
-    //         return responseHelper.sendError(response, env.NOT_FOUND, env.TEAM_NOT_FOUND);
-    //     else {
-    //         teams.players.push(newPlayer);
-    //         TeamSaveCallBack(teams, function (error, player) {
-    //             if (error) {
-    //                 console.log(error);
-    //                 return responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR);
-
-    //             } else {
-    //                 return responseHelper.sendSuccess(response, player);
-    //             }
-    //         });
-    //     }
-    // })
-
 }
 
 

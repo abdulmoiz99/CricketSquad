@@ -66,7 +66,6 @@ const login = function (req, res) {
         .then(_ => _generateJWT(username))
         .then(token => _responseObj = responseHandler.getSuccessResponse({ "token": token }))
         .catch(error => {
-            console.log(error)
             _responseObj = responseHandler.getCustomResponse(401, "Invalid Username or Password.", false)
         })
         .finally(_ => _sendResponse(res, _responseObj))
@@ -74,7 +73,6 @@ const login = function (req, res) {
 const authenticateUser = function (req, res, next) {
     console.log("authenticate user")
     const authHeader = req.headers.authorization
-    console.log(authHeader)
     try {
         const token = authHeader.split(' ')[1];
         jwt.verify(token, "MWA")
