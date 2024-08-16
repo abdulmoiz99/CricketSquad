@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TeamDataService } from '../team-data.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { WorldCupWonComponent } from '../world-cup-won/world-cup-won.component';
 import { GenericResponse } from '../../dto/generic-response';
@@ -9,7 +9,7 @@ import { Team } from '../../models/team';
 @Component({
   selector: 'app-team',
   standalone: true,
-  imports: [CommonModule, WorldCupWonComponent],
+  imports: [CommonModule, WorldCupWonComponent, RouterLink],
   templateUrl: './team.component.html',
   styleUrl: './team.component.css'
 })

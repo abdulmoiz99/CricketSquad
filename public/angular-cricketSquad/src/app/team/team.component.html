@@ -1,4 +1,4 @@
-<div *ngIf="teamResponse.success">
+<div *ngIf="teamResponse?.success">
     <h1>Country: {{teamResponse.data.country}} - <world-cup-won
             [worldCupWon]=teamResponse.data.totalWorldCupWon></world-cup-won></h1>
 
@@ -16,5 +16,6 @@
 </ol>
 
 <div class="d-grid gap-1 d-md-flex mt-2">
-    <button class="btn btn-primary me-md-2" (click) = "deleteTeam()">Delete Team</button>
+    <button class="btn btn-primary me-md-2" (click)="deleteTeam()">Delete Team</button>
+    <a class="btn btn-success" routerLink="new">Add New Player</a>
 </div>

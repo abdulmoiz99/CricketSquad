@@ -1,8 +1,11 @@
 const mongoose = require("mongoose");
 const responseHelper = require("../Utility/responseHelper");
+const responseHandler = require("../Utility/responseHandler");
 
 const env = process.env
 const Team = mongoose.model(env.TEAM_MODEL);
+
+let _responseObj = {}
 
 const getAll = function (request, response) {
     console.log("players getAll")
@@ -65,10 +68,14 @@ const deleteOne = function (request, res) {
 const _validateTeam = function (team) {
     return new Promise((resolve, reject) => {
         if (team == null)
-            reject()
+            reject(new Error(env.TEAM_NOT_FOUND));
         else resolve(team)
     })
 }
+const _sendResponse = function (response, responseObj) {
+    return response.status(responseObj.statusCode).json(responseObj.result)
+}
+
 const addOne = function (request, response) {
     console.log("players addOne controller");
     const teamId = request.params.Id;
@@ -98,10 +105,11 @@ const addOne = function (request, response) {
             team.players.push(newPlayer);
             team.save();
         })
-        .then(_ => responseHelper.sendSuccess(response, player))
-        .catch(error => responseHelper.sendError(response, env.NOT_FOUND, env.TEAM_NOT_FOUND))
-        .catch(error => responseHelper.sendError(response, env.INTERNAL_SERVER, env.INTERNAL_SERVER_ERROR))
-
+        .then(player => _responseObj = responseHandler.getSuccessResponse(player))
+        .catch(error => {
+            _responseObj = responseHandler.getErrorResponse(error)
+        })
+        .finally(_ => _sendResponse(response, _responseObj))
 
     // TeamFindByIdExecCallback(teamId, function (error, teams) {
     //     if (error) {

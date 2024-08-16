@@ -23,7 +23,10 @@ export class TeamDataService {
   public deleteTeam(teamId: String): Observable<GenericResponse<Team>> {
     return this._httpClient.delete<GenericResponse<Team>>(`${this._baseUrl}/teams/${teamId}`);
   }
-  public newTeam(user: object): Observable<GenericResponse<String>> {
-    return this._httpClient.post<GenericResponse<String>>(`${this._baseUrl}/teams`, user)
+  public newTeam(team: object): Observable<GenericResponse<String>> {
+    return this._httpClient.post<GenericResponse<String>>(`${this._baseUrl}/teams`, team)
+  }
+  public newPlayer(player: object): Observable<GenericResponse<String>> {
+    return this._httpClient.post<GenericResponse<String>>(`${this._baseUrl}/teams/66a59c334ac250bb43a9d718/players`, player)
   }
 }

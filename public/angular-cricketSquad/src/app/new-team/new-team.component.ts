@@ -33,6 +33,7 @@ export class NewTeamComponent {
     }
     this._service.newTeam(team).subscribe(response => {
       this.response = response;
+      form.reset();
     })
   }
 }
