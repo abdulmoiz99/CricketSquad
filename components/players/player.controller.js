@@ -29,12 +29,21 @@ const _validatePlayer = function (team, playerId) {
     return new Promise((resolve, reject) => {
         const deletedPlayer = team.players.id(playerId);
         if (!deletedPlayer) {
-            reject()
+            reject(new Error(env.NO_RECORD_FOUND))
         }
         resolve(team);
     })
 }
-
+const _validateTeam = function (team) {
+    return new Promise((resolve, reject) => {
+        if (team == null)
+            reject(new Error(env.TEAM_NOT_FOUND));
+        else resolve(team)
+    })
+}
+const _sendResponse = function (response, responseObj) {
+    return response.status(responseObj.statusCode).json(responseObj.result)
+}
 
 const getAll = function (request, response) {
     console.log("players getAll")
@@ -49,7 +58,7 @@ const getAll = function (request, response) {
         .finally(_ => _sendResponse(response, _responseObj))
 }
 
-const deleteOne = function (request, res) {
+const deleteOne = function (request, response) {
     console.log("players deleteOne controller");
     const teamId = request.params.teamId;
     const playerId = request.params.playerId;
@@ -57,23 +66,9 @@ const deleteOne = function (request, res) {
     Team.findById(teamId)
         .then(team => _validatePlayer(team, playerId))
         .then(team => Team.findByIdAndUpdate(team, { $pull: { players: { _id: playerId } } }))
-        .catch(() => {
-            responseHelper.sendError(response, env.NOT_FOUND, env.NO_RECORD_FOUND)
-        })
-        .then(player => responseHelper.sendSuccess(response, env.PLAYER_DELETED_SUCCESSFULLY))
-        .catch(error => {
-            res.status(500).json({ message: error })
-        })
-}
-const _validateTeam = function (team) {
-    return new Promise((resolve, reject) => {
-        if (team == null)
-            reject(new Error(env.TEAM_NOT_FOUND));
-        else resolve(team)
-    })
-}
-const _sendResponse = function (response, responseObj) {
-    return response.status(responseObj.statusCode).json(responseObj.result)
+        .then(team => _responseObj = responseHandler.getSuccessResponseWithMessage(env.PLAYER_DELETED_SUCCESSFULLY, {}))
+        .catch(error => { _responseObj = responseHandler.getErrorResponse(error) })
+        .finally(_ => _sendResponse(response, _responseObj))
 }
 
 const addOne = function (request, response) {
