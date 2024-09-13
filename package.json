@@ -1,11 +1,21 @@
 {
-  "name": "cricketsquad",
+  "name": "cricketSquad",
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "startBackend": "nodemon --inspect",
+    "startFrontend": "cd ./public/angular-cricketSquad && npm start",
+    "start": "npm run startBackend | npm run startFrontend"
   },
   "author": "Abdul Moiz",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.5.1"
+  }
 }

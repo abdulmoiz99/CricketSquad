@@ -1,0 +1,793 @@
+[{
+	"_id": {
+		"$oid": "66a59b4f4ac250bb43a9d6d7"
+	},
+	"country": "Pakistan",
+	"yearEstablished": 1947,
+	"totalWorldCupWon": 1,
+	"players": [
+		{
+			"name": "Imran Khan",
+			"age": 71,
+			"yearJoined": 1971,
+			"_id": {
+				"$oid": "66a59b4f4ac250bb43a9d6d8"
+			}
+		},
+		{
+			"name": "Wasim Akram",
+			"age": 57,
+			"yearJoined": 1984,
+			"_id": {
+				"$oid": "66a59b4f4ac250bb43a9d6d9"
+			}
+		},
+		{
+			"name": "Babar Azam",
+			"age": 29,
+			"yearJoined": 2015,
+			"_id": {
+				"$oid": "66a59b4f4ac250bb43a9d6da"
+			}
+		},
+		{
+			"name": "Shoaib Akhtar",
+			"age": 48,
+			"yearJoined": 1997,
+			"_id": {
+				"$oid": "66a59b4f4ac250bb43a9d6db"
+			}
+		},
+		{
+			"name": "Shahid Afridi",
+			"age": 44,
+			"yearJoined": 1996,
+			"_id": {
+				"$oid": "66a59b4f4ac250bb43a9d6dc"
+			}
+		},
+		{
+			"name": "Inzamam-ul-Haq",
+			"age": 53,
+			"yearJoined": 1991,
+			"_id": {
+				"$oid": "66a59b4f4ac250bb43a9d6dd"
+			}
+		},
+		{
+			"name": "Shaheen Afridi",
+			"age": 24,
+			"yearJoined": 2018,
+			"_id": {
+				"$oid": "66a59b4f4ac250bb43a9d6de"
+			}
+		},
+		{
+			"name": "Mohammad Rizwan",
+			"age": 32,
+			"yearJoined": 2015,
+			"_id": {
+				"$oid": "66a59b4f4ac250bb43a9d6df"
+			}
+		},
+		{
+			"name": "Fakhar Zaman",
+			"age": 34,
+			"yearJoined": 2017,
+			"_id": {
+				"$oid": "66a59b4f4ac250bb43a9d6e0"
+			}
+		},
+		{
+			"name": "Shadab Khan",
+			"age": 25,
+			"yearJoined": 2017,
+			"_id": {
+				"$oid": "66a59b4f4ac250bb43a9d6e1"
+			}
+		},
+		{
+			"name": "Haris Rauf",
+			"age": 30,
+			"yearJoined": 2020,
+			"_id": {
+				"$oid": "66a59b4f4ac250bb43a9d6e2"
+			}
+		}
+	],
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "66a59b784ac250bb43a9d6e4"
+	},
+	"country": "Australia",
+	"yearEstablished": 1905,
+	"totalWorldCupWon": 5,
+	"players": [
+		{
+			"name": "Steve Smith",
+			"age": 35,
+			"yearJoined": 2010,
+			"_id": {
+				"$oid": "66a59b784ac250bb43a9d6e5"
+			}
+		},
+		{
+			"name": "David Warner",
+			"age": 37,
+			"yearJoined": 2009,
+			"_id": {
+				"$oid": "66a59b784ac250bb43a9d6e6"
+			}
+		},
+		{
+			"name": "Pat Cummins",
+			"age": 31,
+			"yearJoined": 2011,
+			"_id": {
+				"$oid": "66a59b784ac250bb43a9d6e7"
+			}
+		},
+		{
+			"name": "Mitchell Starc",
+			"age": 34,
+			"yearJoined": 2010,
+			"_id": {
+				"$oid": "66a59b784ac250bb43a9d6e8"
+			}
+		},
+		{
+			"name": "Glenn Maxwell",
+			"age": 35,
+			"yearJoined": 2012,
+			"_id": {
+				"$oid": "66a59b784ac250bb43a9d6e9"
+			}
+		},
+		{
+			"name": "Aaron Finch",
+			"age": 37,
+			"yearJoined": 2011,
+			"_id": {
+				"$oid": "66a59b784ac250bb43a9d6ea"
+			}
+		},
+		{
+			"name": "Josh Hazlewood",
+			"age": 33,
+			"yearJoined": 2010,
+			"_id": {
+				"$oid": "66a59b784ac250bb43a9d6eb"
+			}
+		},
+		{
+			"name": "Marnus Labuschagne",
+			"age": 30,
+			"yearJoined": 2018,
+			"_id": {
+				"$oid": "66a59b784ac250bb43a9d6ec"
+			}
+		},
+		{
+			"name": "Alex Carey",
+			"age": 33,
+			"yearJoined": 2018,
+			"_id": {
+				"$oid": "66a59b784ac250bb43a9d6ed"
+			}
+		},
+		{
+			"name": "Travis Head",
+			"age": 30,
+			"yearJoined": 2016,
+			"_id": {
+				"$oid": "66a59b784ac250bb43a9d6ee"
+			}
+		},
+		{
+			"name": "Marcus Stoinis",
+			"age": 34,
+			"yearJoined": 2015,
+			"_id": {
+				"$oid": "66a59b784ac250bb43a9d6ef"
+			}
+		}
+	],
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "66a59b9c4ac250bb43a9d6f1"
+	},
+	"country": "New Zealand",
+	"yearEstablished": 1930,
+	"totalWorldCupWon": 0,
+	"players": [
+		{
+			"name": "Kane Williamson",
+			"age": 33,
+			"yearJoined": 2010,
+			"_id": {
+				"$oid": "66a59b9c4ac250bb43a9d6f2"
+			}
+		},
+		{
+			"name": "Trent Boult",
+			"age": 34,
+			"yearJoined": 2011,
+			"_id": {
+				"$oid": "66a59b9c4ac250bb43a9d6f3"
+			}
+		},
+		{
+			"name": "Tim Southee",
+			"age": 35,
+			"yearJoined": 2008,
+			"_id": {
+				"$oid": "66a59b9c4ac250bb43a9d6f4"
+			}
+		},
+		{
+			"name": "Ross Taylor",
+			"age": 40,
+			"yearJoined": 2006,
+			"_id": {
+				"$oid": "66a59b9c4ac250bb43a9d6f5"
+			}
+		},
+		{
+			"name": "Tom Latham",
+			"age": 32,
+			"yearJoined": 2012,
+			"_id": {
+				"$oid": "66a59b9c4ac250bb43a9d6f6"
+			}
+		},
+		{
+			"name": "Martin Guptill",
+			"age": 37,
+			"yearJoined": 2009,
+			"_id": {
+				"$oid": "66a59b9c4ac250bb43a9d6f7"
+			}
+		},
+		{
+			"name": "Matt Henry",
+			"age": 32,
+			"yearJoined": 2014,
+			"_id": {
+				"$oid": "66a59b9c4ac250bb43a9d6f8"
+			}
+		},
+		{
+			"name": "Colin de Grandhomme",
+			"age": 37,
+			"yearJoined": 2012,
+			"_id": {
+				"$oid": "66a59b9c4ac250bb43a9d6f9"
+			}
+		},
+		{
+			"name": "Mitchell Santner",
+			"age": 32,
+			"yearJoined": 2015,
+			"_id": {
+				"$oid": "66a59b9c4ac250bb43a9d6fa"
+			}
+		},
+		{
+			"name": "Jimmy Neesham",
+			"age": 33,
+			"yearJoined": 2012,
+			"_id": {
+				"$oid": "66a59b9c4ac250bb43a9d6fb"
+			}
+		},
+		{
+			"name": "Lockie Ferguson",
+			"age": 33,
+			"yearJoined": 2016,
+			"_id": {
+				"$oid": "66a59b9c4ac250bb43a9d6fc"
+			}
+		}
+	],
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "66a59bd54ac250bb43a9d6fe"
+	},
+	"country": "India",
+	"yearEstablished": 1926,
+	"totalWorldCupWon": 2,
+	"players": [
+		{
+			"name": "Virat Kohli",
+			"age": 35,
+			"yearJoined": 2008,
+			"_id": {
+				"$oid": "66a59bd54ac250bb43a9d6ff"
+			}
+		},
+		{
+			"name": "Rohit Sharma",
+			"age": 37,
+			"yearJoined": 2007,
+			"_id": {
+				"$oid": "66a59bd54ac250bb43a9d700"
+			}
+		},
+		{
+			"name": "Jasprit Bumrah",
+			"age": 30,
+			"yearJoined": 2016,
+			"_id": {
+				"$oid": "66a59bd54ac250bb43a9d701"
+			}
+		},
+		{
+			"name": "Ravindra Jadeja",
+			"age": 35,
+			"yearJoined": 2009,
+			"_id": {
+				"$oid": "66a59bd54ac250bb43a9d702"
+			}
+		},
+		{
+			"name": "KL Rahul",
+			"age": 32,
+			"yearJoined": 2014,
+			"_id": {
+				"$oid": "66a59bd54ac250bb43a9d703"
+			}
+		},
+		{
+			"name": "Hardik Pandya",
+			"age": 30,
+			"yearJoined": 2016,
+			"_id": {
+				"$oid": "66a59bd54ac250bb43a9d704"
+			}
+		},
+		{
+			"name": "Shreyas Iyer",
+			"age": 29,
+			"yearJoined": 2017,
+			"_id": {
+				"$oid": "66a59bd54ac250bb43a9d705"
+			}
+		},
+		{
+			"name": "Rishabh Pant",
+			"age": 26,
+			"yearJoined": 2017,
+			"_id": {
+				"$oid": "66a59bd54ac250bb43a9d706"
+			}
+		},
+		{
+			"name": "Mohammed Shami",
+			"age": 33,
+			"yearJoined": 2013,
+			"_id": {
+				"$oid": "66a59bd54ac250bb43a9d707"
+			}
+		},
+		{
+			"name": "Shardul Thakur",
+			"age": 32,
+			"yearJoined": 2017,
+			"_id": {
+				"$oid": "66a59bd54ac250bb43a9d708"
+			}
+		},
+		{
+			"name": "Yuzvendra Chahal",
+			"age": 34,
+			"yearJoined": 2016,
+			"_id": {
+				"$oid": "66a59bd54ac250bb43a9d709"
+			}
+		}
+	],
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "66a59bfe4ac250bb43a9d70b"
+	},
+	"country": "South Africa",
+	"yearEstablished": 1889,
+	"totalWorldCupWon": 0,
+	"players": [
+		{
+			"name": "AB de Villiers",
+			"age": 40,
+			"yearJoined": 2004,
+			"_id": {
+				"$oid": "66a59bfe4ac250bb43a9d70c"
+			}
+		},
+		{
+			"name": "Faf du Plessis",
+			"age": 39,
+			"yearJoined": 2011,
+			"_id": {
+				"$oid": "66a59bfe4ac250bb43a9d70d"
+			}
+		},
+		{
+			"name": "Quinton de Kock",
+			"age": 31,
+			"yearJoined": 2012,
+			"_id": {
+				"$oid": "66a59bfe4ac250bb43a9d70e"
+			}
+		},
+		{
+			"name": "Kagiso Rabada",
+			"age": 29,
+			"yearJoined": 2015,
+			"_id": {
+				"$oid": "66a59bfe4ac250bb43a9d70f"
+			}
+		},
+		{
+			"name": "David Miller",
+			"age": 34,
+			"yearJoined": 2010,
+			"_id": {
+				"$oid": "66a59bfe4ac250bb43a9d710"
+			}
+		},
+		{
+			"name": "Lungi Ngidi",
+			"age": 28,
+			"yearJoined": 2017,
+			"_id": {
+				"$oid": "66a59bfe4ac250bb43a9d711"
+			}
+		},
+		{
+			"name": "Anrich Nortje",
+			"age": 30,
+			"yearJoined": 2019,
+			"_id": {
+				"$oid": "66a59bfe4ac250bb43a9d712"
+			}
+		},
+		{
+			"name": "Aiden Markram",
+			"age": 29,
+			"yearJoined": 2017,
+			"_id": {
+				"$oid": "66a59bfe4ac250bb43a9d713"
+			}
+		},
+		{
+			"name": "Rassie van der Dussen",
+			"age": 35,
+			"yearJoined": 2018,
+			"_id": {
+				"$oid": "66a59bfe4ac250bb43a9d714"
+			}
+		},
+		{
+			"name": "Tabraiz Shamsi",
+			"age": 34,
+			"yearJoined": 2016,
+			"_id": {
+				"$oid": "66a59bfe4ac250bb43a9d715"
+			}
+		},
+		{
+			"name": "Heinrich Klaasen",
+			"age": 33,
+			"yearJoined": 2018,
+			"_id": {
+				"$oid": "66a59bfe4ac250bb43a9d716"
+			}
+		}
+	],
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "66a59c334ac250bb43a9d718"
+	},
+	"country": "England",
+	"yearEstablished": 1877,
+	"totalWorldCupWon": 1,
+	"players": [
+		{
+			"name": "Joe Root",
+			"age": 33,
+			"yearJoined": 2012,
+			"_id": {
+				"$oid": "66a59c334ac250bb43a9d719"
+			}
+		},
+		{
+			"name": "Ben Stokes",
+			"age": 33,
+			"yearJoined": 2011,
+			"_id": {
+				"$oid": "66a59c334ac250bb43a9d71a"
+			}
+		},
+		{
+			"name": "Jofra Archer",
+			"age": 29,
+			"yearJoined": 2019,
+			"_id": {
+				"$oid": "66a59c334ac250bb43a9d71b"
+			}
+		},
+		{
+			"name": "Jos Buttler",
+			"age": 33,
+			"yearJoined": 2011,
+			"_id": {
+				"$oid": "66a59c334ac250bb43a9d71c"
+			}
+		},
+		{
+			"name": "Jonny Bairstow",
+			"age": 34,
+			"yearJoined": 2011,
+			"_id": {
+				"$oid": "66a59c334ac250bb43a9d71d"
+			}
+		},
+		{
+			"name": "Chris Woakes",
+			"age": 35,
+			"yearJoined": 2011,
+			"_id": {
+				"$oid": "66a59c334ac250bb43a9d71e"
+			}
+		},
+		{
+			"name": "Moeen Ali",
+			"age": 37,
+			"yearJoined": 2014,
+			"_id": {
+				"$oid": "66a59c334ac250bb43a9d71f"
+			}
+		},
+		{
+			"name": "Sam Curran",
+			"age": 26,
+			"yearJoined": 2018,
+			"_id": {
+				"$oid": "66a59c334ac250bb43a9d720"
+			}
+		},
+		{
+			"name": "Tom Curran",
+			"age": 28,
+			"yearJoined": 2017,
+			"_id": {
+				"$oid": "66a59c334ac250bb43a9d721"
+			}
+		},
+		{
+			"name": "Dawid Malan",
+			"age": 36,
+			"yearJoined": 2017,
+			"_id": {
+				"$oid": "66a59c334ac250bb43a9d722"
+			}
+		},
+		{
+			"name": "Mark Wood",
+			"age": 34,
+			"yearJoined": 2015,
+			"_id": {
+				"$oid": "66a59c334ac250bb43a9d723"
+			}
+		}
+	],
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "66a59c764ac250bb43a9d725"
+	},
+	"country": "Bangladesh",
+	"yearEstablished": 1977,
+	"totalWorldCupWon": 0,
+	"players": [
+		{
+			"name": "Shakib Al Hasan",
+			"age": 37,
+			"yearJoined": 2006,
+			"_id": {
+				"$oid": "66a59c764ac250bb43a9d726"
+			}
+		},
+		{
+			"name": "Tamim Iqbal",
+			"age": 35,
+			"yearJoined": 2007,
+			"_id": {
+				"$oid": "66a59c764ac250bb43a9d727"
+			}
+		},
+		{
+			"name": "Mushfiqur Rahim",
+			"age": 36,
+			"yearJoined": 2005,
+			"_id": {
+				"$oid": "66a59c764ac250bb43a9d728"
+			}
+		},
+		{
+			"name": "Mahmudullah",
+			"age": 37,
+			"yearJoined": 2007,
+			"_id": {
+				"$oid": "66a59c764ac250bb43a9d729"
+			}
+		},
+		{
+			"name": "Taskin Ahmed",
+			"age": 29,
+			"yearJoined": 2014,
+			"_id": {
+				"$oid": "66a59c764ac250bb43a9d72a"
+			}
+		},
+		{
+			"name": "Liton Das",
+			"age": 29,
+			"yearJoined": 2015,
+			"_id": {
+				"$oid": "66a59c764ac250bb43a9d72b"
+			}
+		},
+		{
+			"name": "Mustafizur Rahman",
+			"age": 28,
+			"yearJoined": 2015,
+			"_id": {
+				"$oid": "66a59c764ac250bb43a9d72c"
+			}
+		},
+		{
+			"name": "Mehidy Hasan",
+			"age": 26,
+			"yearJoined": 2016,
+			"_id": {
+				"$oid": "66a59c764ac250bb43a9d72d"
+			}
+		},
+		{
+			"name": "Mohammad Saifuddin",
+			"age": 27,
+			"yearJoined": 2017,
+			"_id": {
+				"$oid": "66a59c764ac250bb43a9d72e"
+			}
+		},
+		{
+			"name": "Soumya Sarkar",
+			"age": 31,
+			"yearJoined": 2014,
+			"_id": {
+				"$oid": "66a59c764ac250bb43a9d72f"
+			}
+		},
+		{
+			"name": "Najmul Hossain Shanto",
+			"age": 25,
+			"yearJoined": 2017,
+			"_id": {
+				"$oid": "66a59c764ac250bb43a9d730"
+			}
+		}
+	],
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "66a59d794ac250bb43a9d732"
+	},
+	"country": "Sri Lanka",
+	"yearEstablished": 1926,
+	"totalWorldCupWon": 1,
+	"players": [
+		{
+			"name": "Kumar Sangakkara",
+			"age": 46,
+			"yearJoined": 2000,
+			"_id": {
+				"$oid": "66a59d794ac250bb43a9d733"
+			}
+		},
+		{
+			"name": "Mahela Jayawardene",
+			"age": 46,
+			"yearJoined": 1997,
+			"_id": {
+				"$oid": "66a59d794ac250bb43a9d734"
+			}
+		},
+		{
+			"name": "Angelo Mathews",
+			"age": 37,
+			"yearJoined": 2008,
+			"_id": {
+				"$oid": "66a59d794ac250bb43a9d735"
+			}
+		},
+		{
+			"name": "Lasith Malinga",
+			"age": 40,
+			"yearJoined": 2004,
+			"_id": {
+				"$oid": "66a59d794ac250bb43a9d736"
+			}
+		},
+		{
+			"name": "Dinesh Chandimal",
+			"age": 34,
+			"yearJoined": 2010,
+			"_id": {
+				"$oid": "66a59d794ac250bb43a9d737"
+			}
+		},
+		{
+			"name": "Dimuth Karunaratne",
+			"age": 36,
+			"yearJoined": 2011,
+			"_id": {
+				"$oid": "66a59d794ac250bb43a9d738"
+			}
+		},
+		{
+			"name": "Kusal Perera",
+			"age": 33,
+			"yearJoined": 2013,
+			"_id": {
+				"$oid": "66a59d794ac250bb43a9d739"
+			}
+		},
+		{
+			"name": "Thisara Perera",
+			"age": 35,
+			"yearJoined": 2009,
+			"_id": {
+				"$oid": "66a59d794ac250bb43a9d73a"
+			}
+		},
+		{
+			"name": "Kusal Mendis",
+			"age": 29,
+			"yearJoined": 2015,
+			"_id": {
+				"$oid": "66a59d794ac250bb43a9d73b"
+			}
+		},
+		{
+			"name": "Wanindu Hasaranga",
+			"age": 26,
+			"yearJoined": 2017,
+			"_id": {
+				"$oid": "66a59d794ac250bb43a9d73c"
+			}
+		},
+		{
+			"name": "Dhananjaya de Silva",
+			"age": 32,
+			"yearJoined": 2016,
+			"_id": {
+				"$oid": "66a59d794ac250bb43a9d73d"
+			}
+		}
+	],
+	"__v": 0
+}]
+

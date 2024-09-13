@@ -1,0 +1,18 @@
+<form [formGroup]="loginForm" (ngSubmit)="login(loginForm)">
+    <div *ngIf="loginResponse && loginResponse.success === false" class="alert alert-danger">
+        {{loginResponse.message}}
+    </div>
+    <legend>Login</legend>
+    <div class="mb-3 mt-5">
+        <label class="form-label">Username</label>
+        <br />
+        <input class="form-control" name="username" id="username" formControlName="username">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        <br />
+        <input class="form-control" name="password" id="password" formControlName="password" type="password">
+    </div>
+    <br />
+    <button class="btn btn-primary" type="submit">Login</button>
+</form>

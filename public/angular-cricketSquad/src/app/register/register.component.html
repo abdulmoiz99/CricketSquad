@@ -1,0 +1,32 @@
+<form [formGroup]="searchForm" (ngSubmit)="search(searchForm)">
+    <legend>Register User</legend>
+    
+    <div *ngIf="registrationResponse && registrationResponse.success === false" class="alert alert-danger">
+        {{registrationResponse.message}}
+    </div>
+    
+    <div *ngIf="registrationResponse && registrationResponse.success === true" class="alert alert-success">
+        {{registrationResponse.message}}
+    </div>
+
+    <div>
+        <label class="form-label">Name</label>
+        <br />
+        <input class="form-control" name="name" id="name" formControlName="name">
+    </div>
+    <br />
+    <div>
+        <label class="form-label">Username</label>
+        <br />
+        <input class="form-control" name="username" id="username" formControlName="username">
+    </div>
+    <br />
+
+    <div>
+        <label class="form-label">Password</label>
+        <br />
+        <input class="form-control" name="password" id="password" formControlName="password" type="password">
+    </div>
+    <br />
+    <button class="btn btn-primary" type="submit">Register</button>
+</form>

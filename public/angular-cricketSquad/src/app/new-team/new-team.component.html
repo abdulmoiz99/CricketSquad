@@ -1,0 +1,23 @@
+<form [formGroup]="newTeamForm" (ngSubmit)="createNewTeam(newTeamForm)">
+    <div *ngIf="response?.success" class="alert alert-success">
+       {{response.message}}
+    </div>
+    <legend>Create New Team</legend>
+    <div class="mb-3 mt-5">
+        <label class="form-label">Country</label>
+        <br />
+        <input class="form-control" name="country" id="country" formControlName="country">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Year Established</label>
+        <br />
+        <input type="number" class="form-control" name="yearEstablished" id="yearEstablished" formControlName="yearEstablished">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Total World Cup Won</label>
+        <br />
+        <input type="number" class="form-control" name="totalWorldCupWon" id="totalWorldCupWon" formControlName="totalWorldCupWon">
+    </div>
+    <br />
+    <button class="btn btn-primary" type="submit">Create New Team</button>
+</form>
