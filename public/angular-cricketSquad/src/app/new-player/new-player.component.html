@@ -1,0 +1,23 @@
+<form [formGroup]="newPlayerForm" (ngSubmit)="addNewPlayer(newPlayerForm)">
+    <div *ngIf="response?.success" class="alert alert-success">
+        {{response.message}}
+    </div>
+    <legend>Add new player</legend>
+    <div class="mb-3 mt-5">
+        <label class="form-label">Name</label>
+        <br />
+        <input class="form-control" name="name" id="name" formControlName="name">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Age</label>
+        <br />
+        <input class="form-control" name="age" id="age" formControlName="age">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Year Joined</label>
+        <br />
+        <input class="form-control" name="yearJoined" id="yearJoined" formControlName="yearJoined">
+    </div>
+    <br />
+    <button class="btn btn-primary" type="submit">Add Player</button>
+</form>

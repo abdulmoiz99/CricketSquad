@@ -1,16 +1,20 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserDataService } from '../user-data.service';
+import { GenericResponse } from '../../dto/generic-response';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
   searchForm!: FormGroup;
+  registrationResponse!: GenericResponse<String>;
+
   constructor(private _service: UserDataService) { }
   ngOnInit(): void {
     this.searchForm = new FormGroup({
@@ -27,7 +31,8 @@ export class RegisterComponent {
     }
 
     this._service.registerUser(user).subscribe(response => {
-      console.log(response)
+      this.registrationResponse = response;
+      if (response.success) form.reset()
     })
 
   }

@@ -11,11 +11,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:4200');
-    res.header('Access-Control-Allow-Headers', 'content-type, authorization');
+    res.header(env.ACCESS_CONTROL_ALLOW_ORIGIN, env.FRONT_ENT_URL);
+    res.header(env.ACCESS_CONTROL_ALLOW_HEADERS, 'content-type, authorization');
+    res.header(env.ACCESS_CONTROL_ALLOW_METHODS, 'DELETE');
     next();
 });
 
 app.use("/api", router);
 
-console.log("Server is listening on http://localhost:" + env.PORT)
+console.log(env.SERVER_IS_LISTENING_TO_MESSAGE + env.PORT)

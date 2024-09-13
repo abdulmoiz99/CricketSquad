@@ -1,8 +1,10 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Team, TeamsResponse } from './teams/teams.component';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { environment } from '../environments/environment';
+import { GenericResponse } from '../dto/generic-response';
+import { Team } from '../models/team';
+import { TeamsResponse } from '../dto/team-response';
 
 @Injectable({
   providedIn: 'root'
@@ -12,13 +14,43 @@ export class TeamDataService {
 
   constructor(private _httpClient: HttpClient) { }
 
-  public getTeams(offset: number, limit: number): Observable<TeamsResponse> {
-    return this._httpClient.get<TeamsResponse>(`${this._baseUrl}/teams?offset=${offset}&count=${limit}`)
+  public getTeams(offset: number, limit: number): Observable<GenericResponse<TeamsResponse>> {
+    return this._httpClient.get<GenericResponse<TeamsResponse>>(`${this._baseUrl}/teams?offset=${offset}&count=${limit}`)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
-  public getTeam(teamId: String): Observable<Team> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${sessionStorage.getItem(environment.token)}`
-    });
-    return this._httpClient.get<Team>(`${this._baseUrl}/teams/${teamId}`, { headers });
+  public getTeam(teamId: String): Observable<GenericResponse<Team>> {
+    return this._httpClient.get<GenericResponse<Team>>(`${this._baseUrl}/teams/${teamId}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+  public deleteTeam(teamId: String): Observable<GenericResponse<Team>> {
+    return this._httpClient.delete<GenericResponse<Team>>(`${this._baseUrl}/teams/${teamId}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+  public newTeam(team: object): Observable<GenericResponse<String>> {
+    return this._httpClient.post<GenericResponse<String>>(`${this._baseUrl}/teams`, team)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+  public newPlayer(teamId: string, player: object): Observable<GenericResponse<String>> {
+    return this._httpClient.post<GenericResponse<String>>(`${this._baseUrl}/teams/${teamId}/players`, player)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+  private handleError(error: HttpErrorResponse): Observable<GenericResponse<any>> {
+    const errorResponse = new GenericResponse<any>(
+      false,
+      error.error.message,
+      {}
+    );
+
+    return of(errorResponse);
   }
 }

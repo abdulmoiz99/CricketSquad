@@ -18,7 +18,7 @@ const playerSchema = mongoose.Schema({
 const teamSchema = mongoose.Schema({
     country: {
         type: String,
-        required: [true, 'country is required']
+        required: true
     },
     yearEstablished: {
         type: Number,
